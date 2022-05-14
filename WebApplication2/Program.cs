@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using WebAPI.Sevices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,7 +7,25 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+/*builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(15);
+
+});*/
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}
+).AddCookie(options =>
+{
+   // options.AccessDeniedPath = "/Users/AccessDenied/"; // probably send back to login?
+    //options.LoginPath = "/Users/Login/"; // probably send to home?
+    options.SlidingExpiration = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IUserService, UserService>();
@@ -38,7 +57,12 @@ app.UseCors("Allow All");
 
 app.UseHttpsRedirection();
 
+// app.UseSession();
+
+app.UseAuthentication();
+
 app.UseAuthorization();
+
 
 app.MapControllers();
 
