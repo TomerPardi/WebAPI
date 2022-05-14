@@ -26,6 +26,13 @@ namespace WebAPI.Controllers
             return (HttpContext.User.FindFirstValue(ClaimTypes.Name));
         }
 
+        [Route("/Server")]
+        [HttpGet]
+        public string getServer()
+        {
+            return HttpContext.Request.Host.ToString();
+        }
+
         private readonly IUserService service;
 
 

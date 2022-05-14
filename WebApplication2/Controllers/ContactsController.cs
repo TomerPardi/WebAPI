@@ -56,7 +56,20 @@ namespace WebAPI.Controllers
 
 
             //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var sourceServer = HttpContext.Request.Host.ToString();
             service.CreateContact(selfID, UserId, name, server);
+            // create a contact at the other side
+            if(sourceServer == server)
+            {
+                service.CreateContact( UserId, selfID , selfID, server);
+            }
+            else
+            {
+                HttpClient httpClient = new HttpClient();
+                var toSend = new { from = selfID, to = UserId, server = sourceServer };
+                httpClient.PostAsJsonAsync(server + "/api/invitations/", toSend);
+
+            }
             return StatusCode(StatusCodes.Status201Created);
         }
 
