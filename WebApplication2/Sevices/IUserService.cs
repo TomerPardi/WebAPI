@@ -10,6 +10,7 @@ namespace WebAPI.Sevices
         /// <returns>User by Id / NULL if not exist</returns>
         public User GetById(string Id);
         public void UpdateUser(User User);
+        public List<Contact> GetAllContacts(string Id);
 
 
     }

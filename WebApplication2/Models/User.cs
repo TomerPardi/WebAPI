@@ -10,8 +10,6 @@ namespace WebApplication2.Models
             Id = v;
             Password = pas;
             Contacts = new();
-
-       
         }
 
         // Id represents username

@@ -2,19 +2,19 @@
 
 namespace WebAPI.Sevices
 {
-    public class UserService : IUserService  
+    public class UserService : IUserService
     {
         public List<User> users = new();
 
         public UserService()
         {
-            users.Add(new User("alice", "123"));
-            users.Add(new User("bob", "456"));
+            // users.Add(new User("alice", "123"));
+            // users.Add(new User("bob", "456"));
         }
 
         public void CreateUser(string Id, string Password)
         {
-            users.Add(new User(Id, Password);
+            users.Add(new User(Id, Password));
         }
 
         public User GetById(string Id)
@@ -25,6 +25,12 @@ namespace WebAPI.Sevices
         public void UpdateUser(User User)
         {
             throw new NotImplementedException();
+        }
+
+        public List<Contact> GetAllContacts(string Id)
+        {
+            User user = GetById(Id);
+            return user.Contacts;
         }
     }
 }

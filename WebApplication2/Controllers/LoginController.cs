@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebAPI.Sevices;
+using WebApplication2.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,27 +21,23 @@ namespace WebAPI.Controllers
 
         // POST api/<LoginController>
         [HttpPost]
-        public IActionResult Post(string value)
+        public IActionResult Post(string value, string password)
         {
-            if (service.GetById(value)
-            {
-                return Ok(); 
-
-            }
-            else return StatusCode(401, "not foo");
             //validation logic
+            User user = service.GetById(value);
+            if (user == null) return BadRequest();
+            else
+            {
+                if (user.Password != password) return BadRequest();
+                else
+                {
+                    // TODO: create session for logged in user!
+                    return Ok(user);
+                }
+            }
+            
         }
 
-        // PUT api/<LoginController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<LoginController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+       
     }
 }
