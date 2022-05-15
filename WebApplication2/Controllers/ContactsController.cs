@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace WebAPI.Controllers
 {
 
-    [Route("api/[controller]")]
+    [Route("api/contacts")]
     [ApiController]
     [Authorize]
     public class ContactsController : ControllerBase

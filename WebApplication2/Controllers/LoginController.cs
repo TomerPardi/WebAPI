@@ -21,9 +21,14 @@ namespace WebAPI.Controllers
 
         [Route("/Self")]
         [HttpGet]
-        public string getSelf()
+        public IActionResult getSelf()
         {
-            return (HttpContext.User.FindFirstValue(ClaimTypes.Name));
+            string self = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            if (string.IsNullOrEmpty(self))
+            {
+                return Unauthorized();
+            }
+            return Ok(self);
         }
 
         private readonly IUserService service;
