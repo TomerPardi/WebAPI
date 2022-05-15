@@ -31,6 +31,13 @@ namespace WebAPI.Controllers
             return Ok(self);
         }
 
+        [Route("/Server")]
+        [HttpGet]
+        public string getServer()
+        {
+            return HttpContext.Request.Host.ToString();
+        }
+
         private readonly IUserService service;
 
 
