@@ -54,8 +54,11 @@ namespace WebAPI.Controllers
         }
 
 
-        private async void Signin(User user)
+        private async 
+
+        Task Signin(User user)
         {
+            Console.WriteLine(user.Id+" "+user.Password);
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name,user.Id),
@@ -66,16 +69,19 @@ namespace WebAPI.Controllers
 
             var authProperties = new AuthenticationProperties
             {
-                // empty?
+                IsPersistent = true,
+                AllowRefresh = true,
+                ExpiresUtc = DateTimeOffset.Now.AddDays(1),
             };
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+           
         }
 
 
         // POST api/<LoginController>
         [HttpPost]
-        public IActionResult Post([FromBody] CredentialsPayload data)
+        public async Task<IActionResult> Post([FromBody] CredentialsPayload data)
         {
             // {"username":"alice", "password":"123"}
             //validation logic
@@ -88,7 +94,8 @@ namespace WebAPI.Controllers
                 {
 
                     // TODO: create session for logged in user!
-                    Signin(user);
+                    await Signin(user);
+                    Console.WriteLine("My life is: "+HttpContext.User.FindFirstValue(ClaimTypes.Name));
                     return Ok(user);
                 }
             }

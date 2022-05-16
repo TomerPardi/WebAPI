@@ -20,15 +20,25 @@ builder.Services.AddAuthentication(options =>
 }
 ).AddCookie(options =>
 {
-   // options.AccessDeniedPath = "/Users/AccessDenied/"; // probably send back to login?
+    //options.AccessDeniedPath = "/Users/AccessDenied/"; // probably send back to login?
     //options.LoginPath = "/Users/Login/"; // probably send to home?
     options.SlidingExpiration = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+    options.Cookie.IsEssential = true;
+    //options.Cookie.HttpOnly = true;
+    //options.Cookie.SameSite = SameSiteMode.None;
 });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.ConsentCookie.IsEssential = true;
+    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+    options.CheckConsentNeeded = context => false;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+});
 
 
 builder.Services.AddCors(options =>
@@ -37,9 +47,10 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder
-            .AllowAnyOrigin()
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .SetIsOriginAllowed(origin => true)
+            .AllowCredentials();
         });
 });
 
