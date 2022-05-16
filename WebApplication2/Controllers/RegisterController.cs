@@ -20,9 +20,9 @@ namespace WebAPI.Controllers
 
         // POST api/<RegisterController>
         [HttpPost]
-        public void Post(string username, string pass)
+        public void Post([FromBody] Payload data)
         {
-            service.CreateUser(username, pass);
+            service.CreateUser(data.username, data.password);
         }
     }
 }
