@@ -37,7 +37,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.ConsentCookie.IsEssential = true;
     // This lambda determines whether user consent for non-essential cookies is needed for a given request.
     options.CheckConsentNeeded = context => false;
-    options.MinimumSameSitePolicy = SameSiteMode.None;
+    //options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
 
@@ -62,11 +62,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCookiePolicy(
+    new CookiePolicyOptions
+    {
+        Secure = CookieSecurePolicy.Always
+    }
+    );
 
 app.UseCors("Allow All");
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 // app.UseSession();
 
