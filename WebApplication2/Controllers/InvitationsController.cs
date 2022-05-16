@@ -5,7 +5,7 @@ using WebAPI.Sevices;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/invitations")]
     [ApiController]
     public class InvitationsController : ControllerBase
     {
@@ -15,6 +15,7 @@ namespace WebAPI.Controllers
             service = s;
         }
 
+        // body of post is {fron, to, server}
         // POST api/<InvitationsController>
         [HttpPost]
         public IActionResult Post(string from, string to, string server)

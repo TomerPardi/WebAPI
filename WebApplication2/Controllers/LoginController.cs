@@ -5,8 +5,15 @@ using System.Security.Claims;
 using WebAPI.Sevices;
 using WebApplication2.Models;
 
+
 namespace WebAPI.Controllers
 {
+    public class Payload
+    {
+        public string username { get; set; }
+        public string password { get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
@@ -68,14 +75,15 @@ namespace WebAPI.Controllers
 
         // POST api/<LoginController>
         [HttpPost]
-        public IActionResult Post(string value, string password)
+        public IActionResult Post([FromBody] Payload data)
         {
+            // {"username":"alice", "password":"123"}
             //validation logic
-            User user = service.GetById(value);
+            User user = service.GetById(data.username);
             if (user == null) return BadRequest();
             else
             {
-                if (user.Password != password) return BadRequest();
+                if (user.Password != data.password) return BadRequest();
                 else
                 {
 
