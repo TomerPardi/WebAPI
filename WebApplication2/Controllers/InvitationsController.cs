@@ -9,6 +9,13 @@ namespace WebAPI.Controllers
     [ApiController]
     public class InvitationsController : ControllerBase
     {
+        public class InvitePayload
+        {
+            public string From { get; set; }
+            public string To { get; set; }
+            public string Server { get; set; }
+        }
+
         private readonly IUserService service;
         public InvitationsController(IUserService s)
         {
@@ -18,12 +25,13 @@ namespace WebAPI.Controllers
         // body of post is {fron, to, server}
         // POST api/<InvitationsController>
         [HttpPost]
-        public IActionResult Post(string from, string to, string server)
+        public IActionResult Post([FromBody] InvitePayload data)
+        //public IActionResult Post(string from, string to, string server)
         {
             // TODO: understand if we need to check if "to" user is exist
             // TODO: what nickname do we need to input?
             // I suppose that it needs to be "from"
-            service.CreateContact(to, from, from, server);
+            service.CreateContact(data.To, data.From, data.From, data.Server);
             return StatusCode(StatusCodes.Status201Created);
         }
 

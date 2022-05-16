@@ -5,6 +5,13 @@ using WebAPI.Sevices;
 
 namespace WebAPI.Controllers
 {
+    public class TransferPayload
+    {
+        public string From { get; set; }
+        public string To { get; set; }
+        public string Content { get; set; }
+    }
+
     [Route("api/transfer")]
     [ApiController]
     public class TransferController : ControllerBase
@@ -17,9 +24,10 @@ namespace WebAPI.Controllers
 
         // POST api/<TransferController>
         [HttpPost]
-        public IActionResult Post(string from, string to, string content)
+        public IActionResult Post([FromBody] TransferPayload data)
+        //public IActionResult Post(string from, string to, string content)
         {
-            service.AddMessage(to, from, content, false);
+            service.AddMessage(data.To, data.From, data.Content, false);
             return StatusCode(StatusCodes.Status201Created);
         }
     }

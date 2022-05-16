@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
 
         // POST api/<RegisterController>
         [HttpPost]
-        public void Post([FromBody] Payload data)
+        public void Post([FromBody] CredentialsPayload data)
         {
             service.CreateUser(data.username, data.password);
         }

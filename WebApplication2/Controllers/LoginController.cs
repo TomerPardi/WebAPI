@@ -8,7 +8,7 @@ using WebApplication2.Models;
 
 namespace WebAPI.Controllers
 {
-    public class Payload
+    public class CredentialsPayload
     {
         public string username { get; set; }
         public string password { get; set; }
@@ -75,7 +75,7 @@ namespace WebAPI.Controllers
 
         // POST api/<LoginController>
         [HttpPost]
-        public IActionResult Post([FromBody] Payload data)
+        public IActionResult Post([FromBody] CredentialsPayload data)
         {
             // {"username":"alice", "password":"123"}
             //validation logic

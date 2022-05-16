@@ -11,6 +11,22 @@ namespace WebAPI.Controllers
     [Route("api/contacts")]
     [ApiController]
     [Authorize]
+    public class MessagePayload
+    {
+        public string Message { get; set; }
+        public string ContactID { get; set; }
+
+        public int MessageID { get; set; } = -1;
+
+
+    }
+
+    public class ContactPayload
+    {
+        public string UserId { get; set; }
+        public string Name { get; set; }
+        public string Server { get; set; }
+    }
     public class ContactsController : ControllerBase
     {
         private readonly IUserService service;
@@ -50,14 +66,15 @@ namespace WebAPI.Controllers
 
         // POST api/<ContactsController>
         [HttpPost]
-        public IActionResult Post(string UserId, string name, string server)
+        //public IActionResult Post(string UserId, string name, string server)
+        public IActionResult Post([FromBody]ContactPayload data)
         {
             string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
 
 
             //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
             var sourceServer = HttpContext.Request.Host.ToString();
-            service.CreateContact(selfID, UserId, name, server);
+            service.CreateContact(selfID, data.UserId, data.Name, data.Server);
             // create a contact at the other side
             /*if(sourceServer == server)
             {
@@ -75,16 +92,17 @@ namespace WebAPI.Controllers
 
         // PUT api/<ContactsController>/5
         [HttpPut("{id}")]
-        public IActionResult Put(string id, string name, string server)
+        //public IActionResult Put(string id, string name, string server)
+        public IActionResult Put([FromBody] ContactPayload data)
         {
             string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
 
             //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
 
-            var user = service.GetAllContacts(selfID).Find(x => x.Id == id);
+            var user = service.GetAllContacts(selfID).Find(x => x.Id == data.UserId);
 
             if (user == null) return NotFound();
-            service.UpdateContact(user, name, server);
+            service.UpdateContact(user, data.Name, data.Server);
             return StatusCode(StatusCodes.Status201Created);
 
         }
@@ -138,22 +156,22 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("{contactID}/messages")]
-        //TODO: reminder,return [FromBody] to message
-        public IActionResult PostMessage(string message, string contactID)
+        public IActionResult PostMessage([FromBody] MessagePayload data)
         {
             string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
 
-            service.AddMessage(selfID, contactID, message, true);
+            service.AddMessage(selfID, data.ContactID, data.Message, true);
             return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpPut]
         [Route("{contactID}/messages/{messageID}")]
-        public void PutMessage([FromBody] string message, string contactID, int messageID)
+        //public void PutMessage([FromBody] string message, string contactID, int messageID)
+        public void PutMessage([FromBody] MessagePayload data)
         {
             string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
 
-            service.ChangeMessage(selfID, message, contactID, messageID);
+            service.ChangeMessage(selfID, data.Message, data.ContactID, data.MessageID);
         }
     }
 }
