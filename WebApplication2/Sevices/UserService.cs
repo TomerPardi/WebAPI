@@ -99,6 +99,7 @@ namespace WebAPI.Sevices
         {
             User user = GetById(Id);
             // sort contacts by the last message
+            if (user.Contacts.Count == 0) { return user.Contacts; }
             user.Contacts.Sort(latsMessageComp);
             return user.Contacts;
         }
