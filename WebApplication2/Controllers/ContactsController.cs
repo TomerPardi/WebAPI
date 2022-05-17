@@ -8,9 +8,7 @@ using System.Security.Claims;
 namespace WebAPI.Controllers
 {
 
-    [Route("api/contacts")]
-    [ApiController]
-    [Authorize]
+    
     public class MessagePayload
     {
         public string Message { get; set; }
@@ -27,6 +25,9 @@ namespace WebAPI.Controllers
         public string Name { get; set; }
         public string Server { get; set; }
     }
+    [Route("api/contacts")]
+    [ApiController]
+    [Authorize]
     public class ContactsController : ControllerBase
     {
         private readonly IUserService service;
@@ -46,17 +47,18 @@ namespace WebAPI.Controllers
         {
             // TODO: Here we need to get somehow the id of the connected user
             // who made the get request
-            string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
-
+            var selfID = HttpContext.User.FindFirst("UserId")?.Value;
+            Console.WriteLine(selfID);
             //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
             return service.GetAllContacts(selfID);// TODO: maybe return partial contacts list, without all the messages?
         }
 
         // GET api/<ContactsController>/{user}
-        [HttpGet("{user}")]
+        [HttpGet]
+        [Route("{user}")]
         public IActionResult Get(string user)
         {
-            string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
             //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
             var contact = service.GetAllContacts(selfID).Find(i => i.Id == user);
@@ -69,7 +71,7 @@ namespace WebAPI.Controllers
         //public IActionResult Post(string UserId, string name, string server)
         public IActionResult Post([FromBody]ContactPayload data)
         {
-            string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
 
             //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
@@ -95,7 +97,7 @@ namespace WebAPI.Controllers
         //public IActionResult Put(string id, string name, string server)
         public IActionResult Put([FromBody] ContactPayload data)
         {
-            string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
             //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
 
@@ -111,7 +113,7 @@ namespace WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
-            string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
 
             //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
@@ -128,7 +130,7 @@ namespace WebAPI.Controllers
         public IActionResult GetAllMessages(string id)
         {
 
-            string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
             return Ok(service.GetAllMessages(selfID, id));
         }
@@ -138,7 +140,7 @@ namespace WebAPI.Controllers
         [Route("{contactID}/messages/{messageID}")]
         public IActionResult GetMessageById(string contactID, int messageID)
         {
-            string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
             return Ok(service.GetMessageById(selfID, contactID, messageID));
         }
@@ -148,7 +150,7 @@ namespace WebAPI.Controllers
         [Route("{contactID}/messages/{messageID}")]
         public IActionResult DeleteMessageById(string contactID, int messageID)
         {
-            string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
             service.DeleteMessageById(selfID, contactID, messageID);
             return StatusCode(StatusCodes.Status204NoContent);
@@ -158,7 +160,7 @@ namespace WebAPI.Controllers
         [Route("{contactID}/messages")]
         public IActionResult PostMessage([FromBody] MessagePayload data)
         {
-            string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
             service.AddMessage(selfID, data.ContactID, data.Message, true);
             return StatusCode(StatusCodes.Status201Created);
@@ -169,7 +171,7 @@ namespace WebAPI.Controllers
         //public void PutMessage([FromBody] string message, string contactID, int messageID)
         public void PutMessage([FromBody] MessagePayload data)
         {
-            string selfID = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
             service.ChangeMessage(selfID, data.Message, data.ContactID, data.MessageID);
         }
