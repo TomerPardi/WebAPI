@@ -121,6 +121,7 @@ namespace WebAPI.Sevices
 
         public void AddMessage(string SelfID, string contactID, string message, bool isSelf)
         {
+            // TODO: update lastMessage's content and date.
             List<Message> mList = GetAllMessages(SelfID, contactID);
             int id;
             if (mList.Count == 0) id = 0;
