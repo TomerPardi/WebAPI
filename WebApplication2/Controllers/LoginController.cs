@@ -2,7 +2,11 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using WebAPI.Sevices;
 using WebApplication2.Models;
 
@@ -19,24 +23,34 @@ namespace WebAPI.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
+        public IConfiguration _configuration;
+        private readonly IUserService service;
+        public LoginController(IUserService s, IConfiguration c)
+        {
+            service = s;
+            _configuration = c;
+        }
+
+
         [Route("/Logout")]
         [HttpGet]
+        [Authorize]
         public void Logout()
         {
             HttpContext.SignOutAsync().Wait(); // TODO: check if wait needed?
         }
 
-
+        [Authorize]
         [Route("/Self")]
         [HttpGet]
         public IActionResult getSelf()
         {
-            string self = HttpContext.User.FindFirstValue(ClaimTypes.Name);
-            if (string.IsNullOrEmpty(self))
+            var selfID = HttpContext.User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(selfID))
             {
                 return Unauthorized();
             }
-            return Ok(self);
+            return Ok(selfID);
         }
 
         [Route("/Server")]
@@ -46,16 +60,9 @@ namespace WebAPI.Controllers
             return HttpContext.Request.Host.ToString();
         }
 
-        private readonly IUserService service;
+  
 
-
-        public LoginController(IUserService s)
-        {
-            service = s;
-        }
-
-
-        private async 
+        /*private async 
 
         Task Signin(User user)
         {
@@ -77,7 +84,7 @@ namespace WebAPI.Controllers
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
            
-        }
+        }*/
 
 
         // POST api/<LoginController>
@@ -95,14 +102,42 @@ namespace WebAPI.Controllers
                 {
 
                     // TODO: create session for logged in user!
-                    await Signin(user);
+                    var token = CreateToken(data.username);
+                    Response.Cookies.Append("token", token, new CookieOptions
+                    {
+                        HttpOnly = true,
+                        SameSite = SameSiteMode.None,
+                        Secure = true
+                    });
                     Console.WriteLine("My life is: "+HttpContext.User.FindFirstValue(ClaimTypes.Name));
                     return Ok(user);
                 }
             }
         }
 
+        private string CreateToken(string username)
+        {
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtParams:SecretKey"]));
+            var mac = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
+                new Claim("UserId", username)
+            };
+
+            var token = new JwtSecurityToken(
+                _configuration["JwtParams:Issuer"],
+                _configuration["JwtParams:Audience"],
+                claims,
+                //expires: DateTime.UtcNow.AddMinutes(60),
+                expires: DateTime.UtcNow.AddSeconds(15),
+                signingCredentials: mac
+                );
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
     }
 
 }
