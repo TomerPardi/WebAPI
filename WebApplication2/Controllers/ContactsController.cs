@@ -48,7 +48,6 @@ namespace WebAPI.Controllers
             // TODO: Here we need to get somehow the id of the connected user
             // who made the get request
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
-            Console.WriteLine(selfID);
             //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
             return service.GetAllContacts(selfID);// TODO: maybe return partial contacts list, without all the messages?
         }
@@ -121,8 +120,8 @@ namespace WebAPI.Controllers
             if (!b) return NotFound();
             return StatusCode(StatusCodes.Status204NoContent);
         }
-
-        /** MESSAGES **/
+        /** ####################################################################### **/
+                                     /** MESSAGES **/
 
         // GET api/<ContactsController>/{user}/messages
         [HttpGet]
