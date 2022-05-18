@@ -10,7 +10,7 @@ namespace WebApplication2.Models
             this.Name = Name;
             this.Server = Server;
             this.Last = null;
-            this.LastDate = null;
+            this.lastdate = null;
             this.Messages = new();
         }
         // Id represents username
@@ -19,7 +19,7 @@ namespace WebApplication2.Models
         public string Server { get; set; }
         public string Last { get; set; }
         [DataType(DataType.DateTime)]
-        public string LastDate { get; set; }
+        public string lastdate { get; set; }
         public List<Message> Messages { get; set; }
     }
 }

@@ -88,8 +88,8 @@ namespace WebAPI.Sevices
                 // if x isn't null and y isnt null
                 else
                 {
-                    var parsedX = DateTime.Parse(x.LastDate);
-                    var parsedY = DateTime.Parse(y.LastDate);
+                    var parsedX = DateTime.Parse(x.lastdate);
+                    var parsedY = DateTime.Parse(y.lastdate);
                     return DateTime.Compare(parsedX, parsedY);
                 }
             }
@@ -123,7 +123,7 @@ namespace WebAPI.Sevices
             if (messageID == user.Messages.Count - 1 && messageID != 0) {
                 Message m = GetMessageById(selfID, contactID, messageID - 1);
                 user.Last = m.Content;
-                user.LastDate = m.Created;
+                user.lastdate = m.Created;
             }
 
             GetAllMessages(selfID,contactID).RemoveAll(x => x.Id == messageID);
@@ -152,7 +152,7 @@ namespace WebAPI.Sevices
             var user = users.Find(x => x.Id == SelfID);
             var contact = user.Contacts.Find(x => x.Id == contactID);
             contact.Last = message;
-            contact.LastDate = newMessage.Created;
+            contact.lastdate = newMessage.Created;
 
 
             // not sure if we need that, because we call "transfer" from client
@@ -177,7 +177,7 @@ namespace WebAPI.Sevices
                 if (messageID == user.Messages.Count - 1 && messageID != 0)
                 {
                     user.Last = message;
-                    user.LastDate = DateTime.UtcNow.ToString("s");
+                    user.lastdate = DateTime.UtcNow.ToString("s");
                 }
             }
         }
