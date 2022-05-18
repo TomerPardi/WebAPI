@@ -7,9 +7,9 @@ namespace WebAPI.Controllers
 {
     public class TransferPayload
     {
-        public string From { get; set; }
-        public string To { get; set; }
-        public string Content { get; set; }
+        public string from { get; set; }
+        public string to { get; set; }
+        public string content { get; set; }
     }
 
     [Route("api/transfer")]
@@ -27,7 +27,7 @@ namespace WebAPI.Controllers
         public IActionResult Post([FromBody] TransferPayload data)
         //public IActionResult Post(string from, string to, string content)
         {
-            service.AddMessage(data.To, data.From, data.Content, false);
+            service.AddMessage(data.to, data.from, data.content, false);
             return StatusCode(StatusCodes.Status201Created);
         }
     }

@@ -11,9 +11,9 @@ namespace WebAPI.Controllers
     {
         public class InvitePayload
         {
-            public string From { get; set; }
-            public string To { get; set; }
-            public string Server { get; set; }
+            public string from { get; set; }
+            public string to { get; set; }
+            public string server { get; set; }
         }
 
         private readonly IUserService service;
@@ -31,7 +31,7 @@ namespace WebAPI.Controllers
             // TODO: understand if we need to check if "to" user is exist
             // TODO: what nickname do we need to input?
             // I suppose that it needs to be "from"
-            service.CreateContact(data.To, data.From, data.From, data.Server);
+            service.CreateContact(data.to, data.from, data.from, data.server);
             return StatusCode(StatusCodes.Status201Created);
         }
 
