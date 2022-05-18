@@ -61,7 +61,7 @@ namespace WebAPI.Sevices
             throw new NotImplementedException();
         }
 
-        private static int latsMessageComp(Contact x, Contact y)
+        private static int LastMessageComp(Contact x, Contact y)
         {
             if (x == null)
             {
@@ -100,7 +100,7 @@ namespace WebAPI.Sevices
             User user = GetById(Id);
             // sort contacts by the last message
             if (user.Contacts.Count == 0) { return user.Contacts; }
-            user.Contacts.Sort(latsMessageComp);
+            user.Contacts.Sort(LastMessageComp);
             return user.Contacts;
         }
 
@@ -118,7 +118,16 @@ namespace WebAPI.Sevices
 
         public void DeleteMessageById(string selfID, string contactID, int messageID)
         {
+            var user = GetById(selfID).Contacts.Find(x => x.Id == contactID);
+            // if last message, update in contact's Last and LastDate
+            if (messageID == user.Messages.Count - 1 && messageID != 0) {
+                Message m = GetMessageById(selfID, contactID, messageID - 1);
+                user.Last = m.Content;
+                user.LastDate = m.Created;
+            }
+
             GetAllMessages(selfID,contactID).RemoveAll(x => x.Id == messageID);
+            
         }
 
         public void AddMessage(string SelfID, string contactID, string message, bool isSelf)
@@ -138,17 +147,23 @@ namespace WebAPI.Sevices
                 sender = contactID;
                 receiver = SelfID;
             }
-            Message newMessage = new Message(id, message, sender, receiver);
+            Message newMessage = new(id, message, sender, receiver);
             mList.Add(newMessage);
+            var user = users.Find(x => x.Id == SelfID);
+            var contact = user.Contacts.Find(x => x.Id == contactID);
+            contact.Last = message;
+            contact.LastDate = newMessage.Created;
 
-            if (isSelf)
+
+            // not sure if we need that, because we call "transfer" from client
+            /*if (isSelf)
             {
                 
                 HttpClient httpClient = new HttpClient();
                 string server = GetAllContacts(SelfID).Find(x => x.Id == contactID).Server;
                 var toSend = new { from = sender, to = receiver, content = message };
                 httpClient.PostAsJsonAsync(server + "/api/transfer/", toSend);
-            }
+            }*/
         }
 
         public void ChangeMessage(string selfID, string message, string contactID, int messageID)
@@ -157,7 +172,13 @@ namespace WebAPI.Sevices
             if (m != null)
             {
                 m.Content = message;
-
+                var user = GetById(selfID).Contacts.Find(x => x.Id == contactID);
+                // if last message, update in contact's Last and LastDate
+                if (messageID == user.Messages.Count - 1 && messageID != 0)
+                {
+                    user.Last = message;
+                    user.LastDate = DateTime.UtcNow.ToString("s");
+                }
             }
         }
     }

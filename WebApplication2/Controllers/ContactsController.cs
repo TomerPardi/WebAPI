@@ -12,10 +12,6 @@ namespace WebAPI.Controllers
     public class MessagePayload
     {
         public string Message { get; set; }
-        public string ContactID { get; set; }
-
-        public int MessageID { get; set; } = -1;
-
 
     }
 
@@ -25,6 +21,13 @@ namespace WebAPI.Controllers
         public string Name { get; set; }
         public string Server { get; set; }
     }
+
+    public class PutPayload
+    {
+        public string Name { get; set; }
+        public string Server { get; set; }
+    }
+
     [Route("api/contacts")]
     [ApiController]
     [Authorize]
@@ -77,30 +80,19 @@ namespace WebAPI.Controllers
             var sourceServer = HttpContext.Request.Host.ToString();
             service.CreateContact(selfID, data.UserId, data.Name, data.Server);
             // create a contact at the other side
-            /*if(sourceServer == server)
-            {
-                service.CreateContact( UserId, selfID , selfID, server);
-            }*/
-            /*else
-            {
-                HttpClient httpClient = new HttpClient();
-                var toSend = new { from = selfID, to = UserId, server = sourceServer };
-                httpClient.PostAsJsonAsync(server + "/api/invitations/", toSend);
-
-            }*/
             return StatusCode(StatusCodes.Status201Created);
         }
 
         // PUT api/<ContactsController>/5
         [HttpPut("{id}")]
         //public IActionResult Put(string id, string name, string server)
-        public IActionResult Put([FromBody] ContactPayload data)
+        public IActionResult Put([FromBody] PutPayload data, string id)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
             //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
 
-            var user = service.GetAllContacts(selfID).Find(x => x.Id == data.UserId);
+            var user = service.GetAllContacts(selfID).Find(x => x.Id == id);
 
             if (user == null) return NotFound();
             service.UpdateContact(user, data.Name, data.Server);
@@ -157,22 +149,22 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("{contactID}/messages")]
-        public IActionResult PostMessage([FromBody] MessagePayload data)
+        public IActionResult PostMessage([FromBody] MessagePayload data, string contactID)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
-            service.AddMessage(selfID, data.ContactID, data.Message, true);
+            service.AddMessage(selfID, contactID, data.Message, true);
             return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpPut]
         [Route("{contactID}/messages/{messageID}")]
         //public void PutMessage([FromBody] string message, string contactID, int messageID)
-        public void PutMessage([FromBody] MessagePayload data)
+        public void PutMessage([FromBody] MessagePayload data, string contactID, string messageID)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
-            service.ChangeMessage(selfID, data.Message, data.ContactID, data.MessageID);
+            service.ChangeMessage(selfID, data.Message, contactID, int.Parse(messageID));
         }
     }
 }
