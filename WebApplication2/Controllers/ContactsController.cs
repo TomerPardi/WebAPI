@@ -11,21 +11,21 @@ namespace WebAPI.Controllers
     
     public class MessagePayload
     {
-        public string Message { get; set; }
+        public string content { get; set; }
 
     }
 
     public class ContactPayload
     {
-        public string UserId { get; set; }
-        public string Name { get; set; }
-        public string Server { get; set; }
+        public string id { get; set; }
+        public string name { get; set; }
+        public string server { get; set; }
     }
 
     public class PutPayload
     {
-        public string Name { get; set; }
-        public string Server { get; set; }
+        public string name { get; set; }
+        public string server { get; set; }
     }
 
     [Route("api/contacts")]
@@ -78,7 +78,7 @@ namespace WebAPI.Controllers
 
             //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
             var sourceServer = HttpContext.Request.Host.ToString();
-            service.CreateContact(selfID, data.UserId, data.Name, data.Server);
+            service.CreateContact(selfID, data.id, data.name, data.server);
             // create a contact at the other side
             return StatusCode(StatusCodes.Status201Created);
         }
@@ -95,7 +95,7 @@ namespace WebAPI.Controllers
             var user = service.GetAllContacts(selfID).Find(x => x.Id == id);
 
             if (user == null) return NotFound();
-            service.UpdateContact(user, data.Name, data.Server);
+            service.UpdateContact(user, data.name, data.server);
             return StatusCode(StatusCodes.Status201Created);
 
         }
@@ -153,7 +153,7 @@ namespace WebAPI.Controllers
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
-            service.AddMessage(selfID, contactID, data.Message, true);
+            service.AddMessage(selfID, contactID, data.content, true);
             return StatusCode(StatusCodes.Status201Created);
         }
 
@@ -164,7 +164,7 @@ namespace WebAPI.Controllers
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
-            service.ChangeMessage(selfID, data.Message, contactID, int.Parse(messageID));
+            service.ChangeMessage(selfID, data.content, contactID, int.Parse(messageID));
         }
     }
 }
