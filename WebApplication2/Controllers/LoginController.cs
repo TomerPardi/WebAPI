@@ -109,7 +109,6 @@ namespace WebAPI.Controllers
                         SameSite = SameSiteMode.None,
                         Secure = true
                     });
-                    Console.WriteLine("My life is: "+HttpContext.User.FindFirstValue(ClaimTypes.Name));
                     return Ok(user);
                 }
             }
@@ -132,8 +131,8 @@ namespace WebAPI.Controllers
                 _configuration["JwtParams:Issuer"],
                 _configuration["JwtParams:Audience"],
                 claims,
-                //expires: DateTime.UtcNow.AddMinutes(60),
-                expires: DateTime.UtcNow.AddSeconds(15),
+                expires: DateTime.UtcNow.AddMinutes(60),
+                //expires: DateTime.UtcNow.AddSeconds(15),
                 signingCredentials: mac
                 );
             return new JwtSecurityTokenHandler().WriteToken(token);

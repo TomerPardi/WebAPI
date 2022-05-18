@@ -85,9 +85,9 @@ namespace WebAPI.Sevices
                 {
                     return 1;
                 }
+                // if x isn't null and y isnt null
                 else
                 {
-
                     var parsedX = DateTime.Parse(x.LastDate);
                     var parsedY = DateTime.Parse(y.LastDate);
                     return DateTime.Compare(parsedX, parsedY);
@@ -106,7 +106,9 @@ namespace WebAPI.Sevices
 
         public List<Message> GetAllMessages(string self, string id)
         {
-            return GetById(self).Contacts.Find(x => x.Id == id).Messages;
+            var user = GetById(self).Contacts.Find(x => x.Id == id);
+            if (user != null) return GetById(self).Contacts.Find(x => x.Id == id).Messages;
+            else return null;
         }
 
         public Message GetMessageById(string selfID, string contactID, int messageID)
