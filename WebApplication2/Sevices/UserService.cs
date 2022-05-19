@@ -75,7 +75,7 @@ namespace WebAPI.Sevices
                 {
                     // If x is null and y is not null, y
                     // is greater.
-                    return -1;
+                    return 1;
                 }
             }
             // if x is not null
@@ -83,14 +83,14 @@ namespace WebAPI.Sevices
             {
                 if (y == null)
                 {
-                    return 1;
+                    return -1;
                 }
                 // if x isn't null and y isnt null
                 else
                 {
                     var parsedX = DateTime.Parse(x.lastdate);
                     var parsedY = DateTime.Parse(y.lastdate);
-                    return DateTime.Compare(parsedX, parsedY);
+                    return -DateTime.Compare(parsedX, parsedY);
                 }
             }
         }
