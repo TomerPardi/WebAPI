@@ -8,8 +8,11 @@ namespace WebAPI.Sevices
 
         public UserService()
         {
-             users.Add(new User("alice", "123"));
-             users.Add(new User("bob", "456"));
+            users.Add(new User("alice", "123"));
+            users.Add(new User("bob", "456"));
+            users.Add(new User("dan", "123"));
+            users.Add(new User("tom", "123"));
+            users.Add(new User("peter", "123"));
         }
 
         public void CreateUser(string Id, string Password)
