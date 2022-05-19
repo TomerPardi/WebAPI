@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using WebAPI.Sevices;
@@ -57,6 +58,10 @@ namespace WebAPI.Controllers
         [HttpGet]
         public string getServer()
         {
+
+                /*IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+                IPAddress ipAddress = ipHostInfo.AddressList[0];
+                return ipAddress.ToString();*/
             return HttpContext.Request.Host.ToString();
         }
 
@@ -131,7 +136,7 @@ namespace WebAPI.Controllers
                 _configuration["JwtParams:Issuer"],
                 _configuration["JwtParams:Audience"],
                 claims,
-                expires: DateTime.UtcNow.AddMinutes(60),
+                expires: DateTime.Now.AddMinutes(60),
                 //expires: DateTime.UtcNow.AddSeconds(15),
                 signingCredentials: mac
                 );
