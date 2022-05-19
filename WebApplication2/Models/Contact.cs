@@ -10,7 +10,7 @@ namespace WebApplication2.Models
             this.Name = Name;
             this.Server = Server;
             this.Last = null;
-            this.lastdate = null;
+            this.lastdate = DateTime.UtcNow.ToString("s");
             this.Messages = new();
         }
         // Id represents username
