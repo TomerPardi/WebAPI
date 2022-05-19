@@ -74,7 +74,12 @@ namespace WebAPI.Controllers
         public IActionResult Post([FromBody]ContactPayload data)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
+            var user = service.GetById(selfID);
+            var contact = user.Contacts.FindAll(x => x.Id == data.id);
 
+            if (selfID == data.id) return StatusCode(StatusCodes.Status409Conflict);
+            if (contact.Count != 0) return StatusCode(StatusCodes.Status409Conflict);  
+            if (service.GetById(data.id) == null) return NotFound();
 
             //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
             var sourceServer = HttpContext.Request.Host.ToString();
