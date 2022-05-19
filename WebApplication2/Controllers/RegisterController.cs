@@ -20,9 +20,11 @@ namespace WebAPI.Controllers
 
         // POST api/<RegisterController>
         [HttpPost]
-        public void Post([FromBody] CredentialsPayload data)
+        public async Task<IActionResult> Post([FromBody] CredentialsPayload data)
         {
+            if (service.GetById(data.username) != null) return BadRequest();
             service.CreateUser(data.username, data.password);
+            return Ok();
         }
     }
 }
