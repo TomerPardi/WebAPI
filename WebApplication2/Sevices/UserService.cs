@@ -63,9 +63,9 @@ namespace WebAPI.Sevices
 
         private static int LastMessageComp(Contact x, Contact y)
         {
-            if (x == null)
+            if (x == null || x.lastdate == null)
             {
-                if (y == null)
+                if (y == null || y.lastdate == null)
                 {
                     // If x is null and y is null, they're
                     // equal.
@@ -81,7 +81,7 @@ namespace WebAPI.Sevices
             // if x is not null
             else
             {
-                if (y == null)
+                if (y == null || y.lastdate == null)
                 {
                     return -1;
                 }

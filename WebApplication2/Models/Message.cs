@@ -11,7 +11,7 @@ namespace WebApplication2.Models
             Sender = sender;
             Receiver = receiver;
             //Created = DateTime.Now.ToString();
-            Created = DateTime.UtcNow.ToString("s");
+            Created = DateTime.Now.ToString("s");
         }
 
         public int Id { get; set; }
