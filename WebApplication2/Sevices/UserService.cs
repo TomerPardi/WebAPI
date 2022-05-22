@@ -180,7 +180,7 @@ namespace WebAPI.Sevices
                 if (messageID == user.Messages.Count - 1 && messageID != 0)
                 {
                     user.Last = message;
-                    user.lastdate = DateTime.UtcNow.ToString("s");
+                    user.lastdate = DateTime.Now.ToString("s");
                 }
             }
         }
