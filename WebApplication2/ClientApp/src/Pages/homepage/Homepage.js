@@ -62,7 +62,6 @@ export default function Homepage(props) {
 
   function conditionalRight() {
     if (active === "none") {
-      console.log("Debug: right - none");
       return (
         <div
           style={{ height: "100%", background: "#99eda1" }}
@@ -78,16 +77,6 @@ export default function Homepage(props) {
           </div>
         </div>
       );
-    } else {
-      console.log("DEBUG: right else");
-      // the user clicked on contact to talk with, active changes to this contact
-      // TODO: are we getting data as JSON or as a list?
-      // list of JSON objects - {id, content, created, sent}
-      // setMessages(
-      //   await fetch(`http://localhost:7066/api/contacts/${active}/messages`, {
-      //     credentials: "include",
-      //   })
-      // );
     }
 
     return (
