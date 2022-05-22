@@ -70,18 +70,13 @@ i {
     max-width: 1200px;
     margin: auto;
     box-shadow: 0 2px 2px #aaaaaa;
-}
 
-.left {
-    width: 35%;
-}
-
-.right {
-    width: 65%;
 }
 
 /* ------ LEFT SIDE ------ */
-
+.left {
+    width: 400px;
+}
 
 .profile {
     width: 100%;
@@ -228,10 +223,10 @@ i {
     min-width: 300px;   
 }
 
-
-
 /* ------ RIGHT SIDE ------ */
-
+.right {
+    width: calc(100% - 400px);
+}
 
 .chat-head {
     background-color: #eeeeee;

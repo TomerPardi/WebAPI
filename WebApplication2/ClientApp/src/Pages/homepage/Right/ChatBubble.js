@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import AppContext from "../../../AppContext";
+import "./Right.css";
+
 
 export default function ChatBubble(props) {
   // JSON object - {id, content, created, sent}
@@ -19,7 +21,6 @@ export default function ChatBubble(props) {
   };
 
   return (
-    // TODO: check whether "sent" is false in case i sent the message
     <div
       className={`chat-bubble ${
         sender === sharedContext.currentUser ? "me" : "you"

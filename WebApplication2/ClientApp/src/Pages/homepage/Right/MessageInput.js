@@ -3,8 +3,10 @@ import { FormControl } from "react-bootstrap";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import { useContext } from "react";
-import AppContext from "../AppContext";
+import AppContext from "../../../AppContext";
 import axios from "axios";
+import "./Right.css";
+
 
 export default function MessageInput(props) {
   let sharedContext = useContext(AppContext);

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import MessageInput from "../MessageInput";
-import Chathead from "./ChatHead";
-import Chatwindow from "./ChatWindow";
-import Contactslist from "./ContactsList";
+import MessageInput from "./Right/MessageInput";
+import Chathead from "./Right/ChatHead";
+import Chatwindow from "./Right/ChatWindow";
+import Contactslist from "./Left/ContactsList";
 import "./Homepage.css";
-import Profile from "./Profile";
-import AppContext from "../../AppContext";
+import Profile from "./Left/Profile";
+import AppContext from "../../AppContext"
 import OutsideAlerter from "../useOutside";
 import axios from "axios";
-import planeGIF from "./static-airplane.png";
 
 
 export default function Homepage(props) {
@@ -64,7 +63,7 @@ export default function Homepage(props) {
         >
           <img
             style={{ height: "75%", maxWidth: "100%" }}
-            src={planeGIF}
+            src="static-airplane.png"
             alt='img'
           ></img>
           <div className='fs-5'>
