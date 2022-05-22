@@ -1,4 +1,5 @@
 import React from "react";
+import "./Left.css";
 
 const Contact = ({ contactName, photo, lastMessage, lastMessageTime }) => {
   const message = () => {

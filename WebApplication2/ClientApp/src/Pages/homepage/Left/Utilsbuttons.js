@@ -1,11 +1,12 @@
 import React from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useContext, useState } from "react";
-import AppContext from "../../AppContext";
+import AppContext from "../../../AppContext";
 import { useNavigate } from "react-router-dom";
 import { getByDisplayValue } from "@testing-library/react";
 import context from "react-bootstrap/esm/AccordionContext";
 import axios from "axios";
+import "./Left.css";
 
 const Utilsbuttons = (props) => {
   let navigate = useNavigate();
@@ -25,7 +26,6 @@ const Utilsbuttons = (props) => {
     setShow(true);
   };
   const handleAdd = async (e) => {
-    // TODO: for some reason this line was commented...
     e.preventDefault();
 
     try {
@@ -38,8 +38,6 @@ const Utilsbuttons = (props) => {
         },
         { withCredentials: true }
       );
-
-      // TODO: return token from server
 
       if (res.status === 201) {
         // contact exists, server added it to contacts list

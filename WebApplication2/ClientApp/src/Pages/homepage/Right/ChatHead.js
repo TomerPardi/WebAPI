@@ -1,7 +1,9 @@
-import React, { useContext } from "react";
-import AppContext from "../../../AppContext";
+import React from "react";
+import "./Right.css";
 
 const Chathead = (props) => {
+  // const contactData = context.userData; ??????
+  // const photo = contactData[props.activeContact].photo; ??????
   if (props.activeContact === "none") {
     return <div>placeholder</div>;
   } else {

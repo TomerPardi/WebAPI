@@ -1,7 +1,7 @@
 import { Form, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
-import AppContext from "../AppContext";
+import AppContext from "../../AppContext";
 import { render } from "@testing-library/react";
 import RegisterAlert from "./RegisterAlert";
 import axios from "axios";
@@ -42,7 +42,7 @@ function Register() {
       try {
         const result = await axios.post(
           "https://localhost:7066/api/Register",
-          { username: username.value, password: password.value },
+          { username: username.value, password: password.value }
           // { withCredentials: true }
         );
         //let resJson = await res.json();
@@ -52,7 +52,8 @@ function Register() {
         }
       } catch (err) {
         console.log(err);
-        if (err.message === "Request failed with status code 409") setErrorMessage("Username is taken!");
+        if (err.message === "Request failed with status code 409")
+          setErrorMessage("Username is taken!");
         else setErrorMessage("Some error occured");
         setShow(true);
         return;
@@ -78,7 +79,6 @@ function Register() {
           role='alert'
           style={{ marginBottom: "0rem" }}
         >
-
           {errorMessage}
         </div>
       </Modal>
@@ -95,7 +95,7 @@ function Register() {
                     className='needs-validation'
                     noValidate
                     autoComplete='off'
-                  // onSubmit={handleSubmit}
+                    // onSubmit={handleSubmit}
                   >
                     <div className='mb-3'>
                       <label className='mb-2 text-muted' htmlFor='uname'>
@@ -111,7 +111,7 @@ function Register() {
                         pattern='^[a-zA-Z0-9]+$'
                         required
                         autoFocus
-                      // onChange={(e) => setUsername(e.target.value)}
+                        // onChange={(e) => setUsername(e.target.value)}
                       ></Form.Control>
                       <Form.Control.Feedback type='invalid'>
                         Username is required and should contain alphanumeric
@@ -134,7 +134,7 @@ function Register() {
                         name='password'
                         pattern='^[a-zA-Z0-9]+$'
                         required
-                      // onChange={(e) => setPassword(e.target.value)}
+                        // onChange={(e) => setPassword(e.target.value)}
                       ></Form.Control>
                       <Form.Control.Feedback type='invalid'>
                         Password is required and should contain alphanumeric
@@ -155,7 +155,7 @@ function Register() {
                         placeholder='Confirm password'
                         name='password'
                         required
-                      // onChange={(e) => setPassword2(e.target.value)}
+                        // onChange={(e) => setPassword2(e.target.value)}
                       ></Form.Control>
                       <Form.Control.Feedback type='invalid'>
                         Password confirmation is required!

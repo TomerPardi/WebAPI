@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./Pages/Login";
-import Register from "./Pages/Register";
+import Login from "./Pages/Login/Login";
+import Register from "./Pages/Register/Register";
 import NotFound from "./Pages/NotFound";
-import Homepage from "./Pages/homepage/Homepage";
+import Homepage from "./Pages/Homepage/Homepage";
 import { ProtectedRoutes } from "./Pages/ProtectedRoutes";
 import { AppContextProvider } from "./AppContext";
 import axios from "axios";
@@ -24,7 +24,6 @@ export const App = () => {
         .catch((e) => console.error(e));
       const serverRes = await axios
         .get(`https://localhost:7066/Server`, {
-
         })
         .catch((e) => console.error(e));
       setLoading(false);
@@ -53,7 +52,6 @@ export const App = () => {
   };
 
   return (
-    // TODO check if we can cache chats locally
     <AppContextProvider value={sharedContext}>
       <BrowserRouter>
         <Routes>

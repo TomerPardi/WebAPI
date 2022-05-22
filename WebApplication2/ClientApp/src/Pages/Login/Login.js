@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useContext, useEffect, useState } from "react";
-import AppContext from "../AppContext";
+import AppContext from "../../AppContext";
 import { Form, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -80,16 +80,16 @@ function Login(props) {
       return;
     }
   };
-  // ******************************************************
 
+
+  // ******************************************************
   return (
     <>
       <Modal show={show} onHide={handleClose}>
         <div
           className='alert alert-danger'
           role='alert'
-          style={{ marginBottom: "0rem" }}
-        >
+          style={{ marginBottom: "0rem" }}>
           Wrong username or password!
         </div>
       </Modal>

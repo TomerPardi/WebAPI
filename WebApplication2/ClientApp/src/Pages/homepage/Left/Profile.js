@@ -1,4 +1,6 @@
 import React from "react";
+import "./Left.css"
+
 
 const Profile = (props) => {
   const userData = props.userData;
