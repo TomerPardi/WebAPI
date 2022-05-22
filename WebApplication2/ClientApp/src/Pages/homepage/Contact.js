@@ -1,5 +1,4 @@
 import React from "react";
-import defaultImage from "./default.jpg";
 
 const Contact = ({ contactName, photo, lastMessage, lastMessageTime }) => {
   const message = () => {
@@ -16,8 +15,7 @@ const Contact = ({ contactName, photo, lastMessage, lastMessageTime }) => {
       <div className='contact d-flex justify-content-start align-items-center position-relative'>
         {/* TODO: what to do with images??? */}
         <img
-          src={photo}
-          alt={defaultImage}
+          src={"default.jpg"}
         ></img>
         <div className='font-name'>
           <div className='fw-bolder'>{contactName}</div>

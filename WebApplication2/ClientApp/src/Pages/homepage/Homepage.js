@@ -6,20 +6,15 @@ import Contactslist from "./ContactsList";
 import "./Homepage.css";
 import Profile from "./Profile";
 import AppContext from "../../AppContext";
-import planeGIF from "./static-airplane.png";
 import OutsideAlerter from "../useOutside";
 import axios from "axios";
+import planeGIF from "./static-airplane.png";
 
-// const handleTabClosing = () => {
-//   AppContext.currentUser = "none";
-// };
 
 export default function Homepage(props) {
   let sharedContext = React.useContext(AppContext);
   const [messages, setMessages] = useState([]);
   const [contacts, setContacts] = useState([]);
-  // a state change to trigger a re-render of the page
-  //const [active, setActive] = useState(context.activeContact); //whether we have chosen a contact
   const [active, setActive] = useState("none");
   const [activeInfo, setActiveInfo] = useState("none");
   

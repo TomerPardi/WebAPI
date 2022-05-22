@@ -1,13 +1,3 @@
-/* * {
-    font-family: 'Roboto', sans-serif;
-    margin: 0px;
-    padding: 0px;
-    box-sizing: border-box;
-}
-
-body {
-    background: #dbdbdb;
-} */
 
 #contact-time {
     position: absolute;
@@ -64,7 +54,6 @@ i {
 }
 
 .green-background {
-    background: url('pattern.png');
     opacity: 0.06;
     background: #009688;
     height: 130px;
