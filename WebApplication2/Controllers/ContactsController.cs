@@ -147,6 +147,9 @@ namespace WebAPI.Controllers
         public IActionResult DeleteMessageById(string contactID, int messageID)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
+            if (selfID == null) return NotFound();
+            var message = service.GetMessageById(selfID, contactID, messageID);
+            if (message == null) return NotFound();
 
             service.DeleteMessageById(selfID, contactID, messageID);
             return StatusCode(StatusCodes.Status204NoContent);
@@ -157,6 +160,7 @@ namespace WebAPI.Controllers
         public IActionResult PostMessage([FromBody] MessagePayload data, string contactID)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
+            if (selfID == null) return NotFound();
 
             service.AddMessage(selfID, contactID, data.content, true);
             return StatusCode(StatusCodes.Status201Created);
@@ -165,11 +169,14 @@ namespace WebAPI.Controllers
         [HttpPut]
         [Route("{contactID}/messages/{messageID}")]
         //public void PutMessage([FromBody] string message, string contactID, int messageID)
-        public void PutMessage([FromBody] MessagePayload data, string contactID, string messageID)
+        public void PutMessage([FromBody] MessagePayload data, string contactID, int messageID)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
+            if (selfID == null) return;
+            var message = service.GetMessageById(selfID, contactID, messageID);
+            if (message == null) return;
 
-            service.ChangeMessage(selfID, data.content, contactID, int.Parse(messageID));
+            service.ChangeMessage(selfID, data.content, contactID, messageID);
         }
     }
 }
