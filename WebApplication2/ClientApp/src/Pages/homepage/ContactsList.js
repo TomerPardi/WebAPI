@@ -14,7 +14,7 @@ const Contactslist = (props) => {
   const convertTime = (toConvert) => {
     if (toConvert) {
       const formatted = new Date(toConvert)
-      return (formatted.getHours() + ':' + formatted.getMinutes());
+      return (formatted.getHours() + ':' + ("0" + formatted.getMinutes()).slice(-2));
     }
   }
 
