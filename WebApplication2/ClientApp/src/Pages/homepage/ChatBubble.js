@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
 import AppContext from "../../AppContext";
 
 

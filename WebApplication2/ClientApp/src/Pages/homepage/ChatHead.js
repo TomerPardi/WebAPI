@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import AppContext from "../../AppContext";
-import defaultImage from "./default.jpg";
 
 const Chathead = (props) => {
   const sharedContext = useContext(AppContext);
@@ -14,9 +13,7 @@ const Chathead = (props) => {
       <div className='chat-head'>
       {/* TODO: again, what to do with photos? */}
         <img
-          src="default.jpg"
-          alt={defaultImage}
-        ></img>
+          src="default.jpg" />
         <div className='chat-name'>
           <h1 className='font-name'>
             {props.activeContact.name}
