@@ -20,7 +20,7 @@ export default function ChatBubble(props) {
 
   return (
     // TODO: check whether "sent" is false in case i sent the message
-    <div className={`chat-bubble ${sender == sharedContext.currentUser ? "me" : "you"}`}>
+    <div className={`chat-bubble ${sender === sharedContext.currentUser ? "me" : "you"}`}>
       {content}
       <h6 className='text-muted' style={{ justifySelf: "right" }}>
         {convertTime(created)}

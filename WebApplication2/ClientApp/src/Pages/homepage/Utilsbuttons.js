@@ -46,7 +46,6 @@ const Utilsbuttons = (props) => {
         // server generated empty messages list
         props.setter(true);
       } else {
-        // TODO: need to differentiate between server respone
         // 1) the contact that client wish to add is already in his list
         // server returns 409 conflict
         if (res.status === 409) {
@@ -69,15 +68,6 @@ const Utilsbuttons = (props) => {
     }
 
     try {
-      // let res = await fetch(`https://${contactServer}/api/invitations/`, {
-      //   method: "POST",
-      //   body: JSON.stringify({
-      //     From: context.currentUser,
-      //     To: contactName,
-      //     Server: "localhost:7066",
-      //   }),
-      // });
-      console.log(sharedContext.currentUser);
       const res = await axios.post(
         `https://${contactServer}/api/invitations/`,
         {
@@ -114,7 +104,7 @@ const Utilsbuttons = (props) => {
 
   const handleKey = (event) => {
     if (event.key === "Enter" && !disabled) {
-      handleAdd();
+      handleAdd(event);
     }
   };
 
@@ -150,7 +140,6 @@ const Utilsbuttons = (props) => {
             <Form.Group className='mb-3' controlId='newContact'>
               <Form.Label>Contact's ID (Username)</Form.Label>
               <Form.Control
-                id='input'
                 placeholder="Contact's ID"
                 onChange={handleChangeName}
                 onKeyDown={handleKey}
@@ -158,7 +147,6 @@ const Utilsbuttons = (props) => {
               />
               <Form.Label>Contact's Nickname</Form.Label>
               <Form.Control
-                id='input'
                 placeholder="Contact's nickname"
                 onChange={handleChangeNick}
                 onKeyDown={handleKey}
@@ -166,7 +154,6 @@ const Utilsbuttons = (props) => {
               />
               <Form.Label>Contact's Server</Form.Label>
               <Form.Control
-                id='input'
                 placeholder="Contact's server"
                 onChange={handleChangeServer}
                 onKeyDown={handleKey}

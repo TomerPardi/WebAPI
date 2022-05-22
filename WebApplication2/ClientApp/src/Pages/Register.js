@@ -34,14 +34,12 @@ function Register() {
         form.classList.add("was-validated");
         return;
       }
-      console.log(password.value, password2.value);
-      if (password.value != password2.value) {
+      if (password.value !== password2.value) {
         setErrorMessage("Passwords are not matching!");
         setShow(true);
         return;
       }
       try {
-        console.log(username.value, password.value);
         const result = await axios.post(
           "https://localhost:7066/api/Register",
           { username: username.value, password: password.value },

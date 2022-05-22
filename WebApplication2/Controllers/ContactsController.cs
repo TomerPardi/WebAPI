@@ -48,11 +48,9 @@ namespace WebAPI.Controllers
         [HttpGet]
         public IEnumerable<Contact> Get()
         {
-            // TODO: Here we need to get somehow the id of the connected user
             // who made the get request
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
-            //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
-            return service.GetAllContacts(selfID);// TODO: maybe return partial contacts list, without all the messages?
+            return service.GetAllContacts(selfID);
         }
 
         // GET api/<ContactsController>/{user}
@@ -61,8 +59,6 @@ namespace WebAPI.Controllers
         public IActionResult Get(string user)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
-
-            //var Id = HttpContext.User.FindFirstValue(ClaimTypes.Name);
             var contact = service.GetAllContacts(selfID).Find(i => i.Id == user);
             if (contact == null) return NotFound();
             return Ok(contact);
@@ -70,7 +66,6 @@ namespace WebAPI.Controllers
 
         // POST api/<ContactsController>
         [HttpPost]
-        //public IActionResult Post(string UserId, string name, string server)
         public IActionResult Post([FromBody]ContactPayload data)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
