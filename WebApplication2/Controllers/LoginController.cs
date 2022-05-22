@@ -38,7 +38,7 @@ namespace WebAPI.Controllers
         [Authorize]
         public void Logout()
         {
-            HttpContext.SignOutAsync().Wait(); // TODO: check if wait needed?
+            HttpContext.SignOutAsync().Wait();
         }
 
         [Authorize]
@@ -58,10 +58,6 @@ namespace WebAPI.Controllers
         [HttpGet]
         public string getServer()
         {
-
-                /*IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-                IPAddress ipAddress = ipHostInfo.AddressList[0];
-                return ipAddress.ToString();*/
             return HttpContext.Request.Host.ToString();
         }
 

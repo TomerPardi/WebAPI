@@ -10,7 +10,6 @@ namespace WebApplication2.Models
             Content = content;
             Sender = sender;
             Receiver = receiver;
-            //Created = DateTime.Now.ToString();
             Created = DateTime.Now.ToString("s");
         }
 

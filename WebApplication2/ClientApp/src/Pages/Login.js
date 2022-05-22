@@ -16,6 +16,19 @@ function Login(props) {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
+  useEffect(() => {
+    const getServer = async () => {
+      const serverRes = await axios
+        .get(`https://localhost:7066/Server`, {
+        })
+        .catch((e) => console.error(e));
+      if (serverRes !== undefined) {
+        sharedContext.server = serverRes.data;
+      }
+    };
+    getServer();
+  });
+
   let handleSubmit = async (e) => {
     const form = document.getElementById("form");
     e.preventDefault();
@@ -53,6 +66,11 @@ function Login(props) {
             // alert("Wrong username or password!");
             return;
           }
+        }, (err) => {
+          console.log(err);
+          setMessage("Some error occured");
+          setShow(true);
+          return;
         });
     } catch (err) {
       console.log(err);
@@ -143,6 +161,15 @@ function Login(props) {
                   <div className='text-center'>
                     Don't have an account?{" "}
                     <Link to='/register'>Register now!</Link>
+                    <br></br><br></br>
+                    <a
+                      type='button'
+                      href='http://localhost:5081'
+                      className='btn btn-outline-primary'
+                    >
+                      <i class='bi bi-star'></i>
+                      &nbsp; Rate us!
+                    </a>
                   </div>
                 </div>
               </div>
@@ -150,13 +177,10 @@ function Login(props) {
           </div>
         </div>
       </section>
-      <div className='d-flex align-items-center flex-column'>
-        <a href='http://localhost:5081'>
-          Rate us!
-        </a>
-      </div>
+      {/* <div className='d-flex align-items-center flex-column'>
+        <a href='http://localhost:5081'>Rate us!</a>
+      </div> */}
     </>
-    
   );
 }
 

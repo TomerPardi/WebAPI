@@ -24,10 +24,9 @@ export const App = () => {
         .catch((e) => console.error(e));
       const serverRes = await axios
         .get(`https://localhost:7066/Server`, {
-          withCredentials: true,
+
         })
         .catch((e) => console.error(e));
-
       setLoading(false);
       if (res !== undefined && res.status === 200) {
         setAuth(true);
@@ -42,16 +41,15 @@ export const App = () => {
       const connection = new HubConnectionBuilder()
         .withUrl("https://localhost:7066/messagesHub")
         .build();
-      
+
       sharedContext.connection = connection;
       connection.on("Changed", () => {
         // we need to define changed state in app js
         setChanged(true);
-        console.log("im inside changed")
       });
       await connection.start();
       await connection.invoke("Join", username);
-    } catch {}
+    } catch { }
   };
 
   return (

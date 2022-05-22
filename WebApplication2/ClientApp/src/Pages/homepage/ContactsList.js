@@ -9,7 +9,6 @@ import { ListGroup } from "react-bootstrap";
 // and setActive to set current active user i talk with
 const Contactslist = (props) => {
   const sharedContext = useContext(AppContext);
-  //console.log(props.contactsList)
   // we are fetching contacts list in Homepage
   // {id, name, server, last, lastdate}
   const convertTime = (toConvert) => {

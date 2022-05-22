@@ -16,12 +16,6 @@ import axios from "axios";
 
 export default function Homepage(props) {
   let sharedContext = React.useContext(AppContext);
-  // console.log(context.currentUser);
-  // console.log(context.activeContact);
-  // change to fetch from /api/contacts/alice/messages
-  // const [messages, setMessages] = useState(
-  //   context.userData[user].contacts[context.activeContact]
-  // );
   const [messages, setMessages] = useState([]);
   const [contacts, setContacts] = useState([]);
   // a state change to trigger a re-render of the page
