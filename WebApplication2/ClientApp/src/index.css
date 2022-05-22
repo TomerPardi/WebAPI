@@ -1,0 +1,50 @@
+/* html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: linear-gradient(110deg, #147531 60%, #168d4c 60%);
+} */
+
+body {
+  background: linear-gradient(-45deg, #f7f7f7, #9cca9c, #23d57c, #0f8b4d);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+/* div.back {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(110deg, #147531 60%, #168d4c 60%);
+} */
+
+#myimg {
+  width: 70px;
+  float: left;
+  padding-left: 20px;
+  padding-top: 20px;
+  /* filter: invert(100%) */
+}
+
+#section {
+  padding-top: 10px;
+}
+
+.modal-in {
+  background-color: transparent;
+}
