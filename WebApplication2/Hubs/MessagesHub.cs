@@ -13,13 +13,11 @@ namespace WebAPI.Hubs
         public async Task Join(string user)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, user);
-            Console.WriteLine("DEBUG:group " + user + "created");
         }
 
         public async Task Unjoin(string user)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, user);
-            Console.WriteLine("DEBUG:group " + user + "removed");
         }
     }
 }
