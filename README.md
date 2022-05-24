@@ -78,14 +78,17 @@ We provide as batch script to launch the servers simultaneously, launch.bat loca
  ![launch](https://user-images.githubusercontent.com/72495653/170070632-87547af1-7984-4f69-bb76-849578acb31d.gif)
 
 Otherwise launch the asp.net servers and run npm start from the ClientApp folder.
+ Rating app demo:  
+![anim-opt](https://user-images.githubusercontent.com/72495653/170073636-85ecb660-0df5-44b9-b496-6eda0d9cc070.gif)
+  
+  
 The default username/passwords are alice 123 ,bob 456
 * Limitations:
 Due to the authentication using JWT and cookies only one client can be connected per browser (2 if using one incognito browser.)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-Rating app:
-![anim-opt](https://user-images.githubusercontent.com/72495653/170073636-85ecb660-0df5-44b9-b496-6eda0d9cc070.gif)
+
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
