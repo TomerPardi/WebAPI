@@ -134,5 +134,25 @@ namespace RatingApp.Controllers
         {
             return service.GetAllUsers().All(e => e.Id == id);
         }
+
+        [HttpPost, ActionName("Search")]
+        public IActionResult Search(string query)
+        {
+            if (query == null)
+            {
+                return View(service.GetAllUsers());
+            }
+            List<User> list = service.GetAllUsers().Where(User => User.Opinion.Contains(query) ||
+                 User.Name.Contains(query)).ToList();
+            return View(list);
+
+        }
+
+        public IActionResult Search()
+        {
+            return View(service.GetAllUsers());
+
+
+        }
     }
 }
