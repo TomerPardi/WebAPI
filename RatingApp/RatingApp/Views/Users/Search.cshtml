@@ -1,23 +1,23 @@
 ﻿@using RatingApp.Controllers
 
-@model MyViewModel
+@model List<User>
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Rating Page</h1>
-<h1>Average Rating: @Model.AVG</h1>
 
-
+<form asp-action="Search">
+    <input name="query"/>
+    <input type="submit" value="Search"/>
+</form>
 
 <p>
-   <a class="btn btn-outline-light text-black border-dark" asp-action="Create">Add Review</a>
-   <a class="btn btn-outline-light text-black border-dark" asp-action="Search">Search</a>
-
-    @*<a class="btn btn-light" asp-action="Create">Add Review</a>*@
+    <a class="btn btn-light" asp-action="Index">Go back to home</a>
 </p>
-<table class="table table-hover">
+
+<table class="table table-hover col-8">
     <thead>
         <tr>
             
@@ -37,7 +37,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.users) {
+@foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Rating)
@@ -50,11 +50,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Time)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
