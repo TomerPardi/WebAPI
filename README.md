@@ -75,13 +75,23 @@ Please make sure that the rating app server is listeting on port 5081, and that 
 ## Usage
 
 We provide as batch script to launch the servers simultaneously, launch.bat located in the root folder.
+https://user-images.githubusercontent.com/72495653/170061935-40231c42-6ef5-466d-bfb0-4ebc0c42e63b.mp4
+  
 Otherwise launch the asp.net servers and run npm start from the ClientApp folder.
-
+The default username/passwords are alice 123 ,bob 456
 * Limitations:
 Due to the authentication using JWT and cookies only one client can be connected per browser (2 if using one incognito browser.)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+Rating app:
+https://user-images.githubusercontent.com/72495653/170066246-22864b31-008c-4b11-b455-7e72818141e2.mp4
+
+
+
+
+Chat demo:
+https://user-images.githubusercontent.com/72495653/170066277-31f4893e-3e16-46b4-be8f-9eac55bd0c6f.mp4
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
