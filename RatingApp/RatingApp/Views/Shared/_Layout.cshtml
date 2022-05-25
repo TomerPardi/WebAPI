@@ -14,10 +14,10 @@
 
         <div class=" ms-1 ">
             @{
-                var test = (Context.Request.Host.Host);
-                test = "http://" + test + ":3000";
+                var host = (Context.Request.Host.Host);
+                host = "http://" + host + ":3000";
             }
-            <a href="@test" class="btn btn-outline-light text-black border-dark" text="dark" >Back to chat</a>
+            <a href="@host" class="btn btn-outline-light text-black border-dark" text="dark" >Back to chat</a>
         </div>
         
         <div role="main" class="mx-auto">

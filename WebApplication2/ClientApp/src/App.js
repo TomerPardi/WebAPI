@@ -16,6 +16,7 @@ export const App = () => {
   const sharedContext = require("./sharedContext.json");
 
   useEffect(() => {
+    sharedContext.hostname_n_port = window.location.hostname + ":" + window.location.port;
     sharedContext.hostname = window.location.hostname;
     const authenticate = async () => {
       const res = await axios
