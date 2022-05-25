@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using RatingApp.Models;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace RatingApp.Data
 {
     public class RatingAppContext : DbContext
     {
-        public RatingAppContext (DbContextOptions<RatingAppContext> options)
+        public RatingAppContext(DbContextOptions<RatingAppContext> options)
             : base(options)
         {
         }

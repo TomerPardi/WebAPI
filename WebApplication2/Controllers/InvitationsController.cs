@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.SignalR;
 using WebAPI.Hubs;
 using WebAPI.Sevices;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebAPI.Controllers
 {
@@ -30,7 +29,6 @@ namespace WebAPI.Controllers
         // POST api/<InvitationsController>
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] InvitePayload data)
-        //public IActionResult Post(string from, string to, string server)
         {
             try
             {
@@ -40,9 +38,7 @@ namespace WebAPI.Controllers
             {
                 Console.Write(ex);
             }
-            // TODO: understand if we need to check if "to" user is exist
-            // TODO: what nickname do we need to input?
-            // I suppose that it needs to be "from"
+
             service.CreateContact(data.to, data.from, data.from, data.server);
             return StatusCode(StatusCodes.Status201Created);
         }

@@ -1,6 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using RatingApp.Data;
 using RatingApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);

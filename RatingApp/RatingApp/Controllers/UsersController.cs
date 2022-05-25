@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using RatingApp.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using RatingApp.Models;
 using RatingApp.Services;
 
@@ -13,7 +6,7 @@ namespace RatingApp.Controllers
 {
     public class MyViewModel
     {
-        
+
         public List<User> users { get; set; }
         public double AVG { get; set; }
 
@@ -26,7 +19,7 @@ namespace RatingApp.Controllers
     public class UsersController : Controller
     {
         private readonly IUserService service;
-        
+
 
         public UsersController(IUserService s)
         {
@@ -61,8 +54,6 @@ namespace RatingApp.Controllers
         }
 
         // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Id,Rating,Name,Opinion")] User user)
@@ -89,8 +80,6 @@ namespace RatingApp.Controllers
         }
 
         // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("Id,Rating,Name,Opinion")] User user)
@@ -102,8 +91,8 @@ namespace RatingApp.Controllers
 
             user.Name = "def";
             user.Opinion = "def";
-                
-            service.EditUser(id ,user.Rating);
+
+            service.EditUser(id, user.Rating);
             return RedirectToAction(nameof(Index));
         }
 

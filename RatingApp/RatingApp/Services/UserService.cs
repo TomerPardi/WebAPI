@@ -21,7 +21,7 @@ namespace RatingApp.Services
             int id = _users.Max(x => x.Id) + 1;
             DateTime localDate = DateTime.Now;
             string time = localDate.ToString();
-            _users.Add(new User() { Id = id, Name = name, Opinion = opinion, Rating = rating, Time = time});
+            _users.Add(new User() { Id = id, Name = name, Opinion = opinion, Rating = rating, Time = time });
         }
         public void CreateUser(User user)
         {
@@ -29,11 +29,12 @@ namespace RatingApp.Services
             if (_users.Count() == 0)
             {
                 id = 1;
-            } else
+            }
+            else
             {
                 id = _users.Max(x => x.Id) + 1;
             }
-            
+
             DateTime localDate = DateTime.Now;
             string time = localDate.ToString();
             string name = user.Name;

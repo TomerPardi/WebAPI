@@ -6,8 +6,7 @@ namespace WebAPI.Sevices
     {
         public void CreateUser(string Id, string Password);
 
-        /// <param name="Id">Id is username</param>
-        /// <returns>User by Id / NULL if not exist</returns>
+
         public User GetById(string Id);
         public void UpdateUser(User User);
         public List<Contact> GetAllContacts(string Id);

@@ -10,7 +10,6 @@ namespace WebApplication2.Models
             Content = content;
             Sender = sender;
             Receiver = receiver;
-            //Created = DateTime.Now.ToString();
             Created = DateTime.Now.ToString("s");
         }
 
@@ -20,8 +19,6 @@ namespace WebApplication2.Models
         public string Receiver { get; set; }
         [DataType(DataType.DateTime)]
         public string Created { get; set; }
-
-        // need to add BodyImage, BodyAudio, BodyVideo etc.
 
     }
 }

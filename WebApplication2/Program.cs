@@ -1,11 +1,8 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using WebAPI.Sevices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPI.Hubs;
-using Microsoft.AspNetCore.Builder;
+using WebAPI.Sevices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,16 +60,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-// not sure if needed *************************************
-/*app.UseCookiePolicy(
-    new CookiePolicyOptions
-    {
-        Secure = CookieSecurePolicy.Always
-    }
-    );*/
-// ********************************************************
-
 
 
 app.UseHttpsRedirection();
