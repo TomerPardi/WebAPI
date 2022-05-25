@@ -32,6 +32,7 @@
 
 - This is the second part out of four in the project for _Advanced Programming 2_ course at Bar Ilan University.
 - In this part we created a web server using asp.net, which implemets the API provided.We migrated and adjusted the first part of the project (https://github.com/TomerPardi/Whatsapp-Web-Clone) to work with the server using API calls. In its current state the app supports only text communication.
+We used JWT's to distinguish and differentiate between connected users, and we identify user requests by the tokens embedded in the requests.
 Real time communications between users is implemented using SignalR hub in the server.
 Additionally, the repository contains a rating page created using asp.net MVC, which is linked to the chat login page. 
 - Authors: **Daniel Bronfman** (ID: 315901173) & **Tomer Pardilov** (ID: 316163922).
@@ -83,9 +84,17 @@ Otherwise launch the asp.net servers and run npm start from the ClientApp folder
 ![anim-opt](https://user-images.githubusercontent.com/72495653/170073636-85ecb660-0df5-44b9-b496-6eda0d9cc070.gif)
   
   
-The default username/passwords are alice 123 ,bob 456
+The default username/passwords are:
+Username | Password
+-------------------
+  alice  | 123
+  bob    | 456
+  dan    | 123
+  peter  | 123
+
 * Limitations:
 Due to the authentication using JWT and cookies only one client can be connected per browser (2 if using one incognito browser.)
+For best results use Google Chrome.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
