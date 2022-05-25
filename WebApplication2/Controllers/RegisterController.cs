@@ -21,7 +21,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CredentialsPayload data)
         {
-            if (service.GetById(data.username) != null) return BadRequest();
+            if (service.GetById(data.username) != null) return StatusCode(StatusCodes.Status409Conflict);
             service.CreateUser(data.username, data.password);
             return Ok();
         }

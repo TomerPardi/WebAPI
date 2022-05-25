@@ -72,9 +72,7 @@ export const App = () => {
               <Login setAuth={setAuth} connectionFunc={connectionFunc} />
             }
           />
-          {/* <Route path='/' element={<Main isLoading={isLoading} isAuth={isAuth} />} /> */}
           <Route path='register' element={<Register />} />
-          {/* <Route path='login' element={<Login setAuth={setAuth} />} /> */}
         </Routes>
       </BrowserRouter>
     </AppContextProvider>

@@ -3,8 +3,16 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPI.Hubs;
 using WebAPI.Sevices;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using WebAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddDbContext<WebAPIContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("WebAPIContext") ?? 
+    throw new InvalidOperationException("Connection string 'WebAPIContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddCors(options =>

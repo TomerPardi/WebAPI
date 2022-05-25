@@ -1,29 +1,34 @@
-﻿using WebApplication2.Models;
+﻿using WebAPI.Data;
+using WebApplication2.Models;
 
 namespace WebAPI.Sevices
 {
     public class UserService : IUserService
     {
-        public List<User> users = new();
+/*        public List<User> _contextUser = new();
+*/        public WebAPIContext _context;
 
-        public UserService()
+
+        public UserService(WebAPIContext context)
         {
-            users.Add(new User("alice", "123"));
-            users.Add(new User("bob", "456"));
-            users.Add(new User("dan", "123"));
-            users.Add(new User("tom", "123"));
-            users.Add(new User("peter", "123"));
+            _context = context;
+/*            _context.User.Add(new User("alice", "123"));
+            _context.User.Add(new User("bob", "456"));
+            _context.User.Add(new User("dan", "123"));
+            _context.User.Add(new User("tom", "123"));
+            _context.User.Add(new User("peter", "123"));*/
         }
 
-        public void CreateUser(string Id, string Password)
+        public async void CreateUser(string Id, string Password)
         {
-            users.Add(new User(Id, Password));
+            _context.User.Add(new User(Id, Password));
+            await _context.SaveChangesAsync();
         }
 
         public void CreateContact(string Self, string UserId, string Name, string Server)
         {
             //find self in user list
-            var user = users.Find(x => x.Id == Self);
+            var user = _context.User.Find(x => x.Id == Self);
             // create and add new contact to self Contacts list via passed params
             user.Contacts.Add(new Contact(UserId, Name, Server));
         }
@@ -31,7 +36,7 @@ namespace WebAPI.Sevices
         public void UpdateContact(string Self, string UserId, string Name, string Server)
         {
             //find self in user list
-            var user = users.Find(x => x.Id == Self);
+            var user = _contextUser.Find(x => x.Id == Self);
 
             var contact = user.Contacts.Find(x => x.Id == UserId);
             contact.Name = Name;
@@ -49,14 +54,14 @@ namespace WebAPI.Sevices
 
         public bool DeleteContact(string self, string toRemove)
         {
-            var user = users.Find(x => x.Id == self);
+            var user = _contextUser.Find(x => x.Id == self);
             return user.Contacts.RemoveAll(x => x.Id == toRemove) > 0;
         }
 
 
         public User GetById(string Id)
         {
-            return (users.Find(x => x.Id == Id));
+            return (_contextUser.Find(x => x.Id == Id));
         }
 
         public void UpdateUser(User User)
@@ -154,7 +159,7 @@ namespace WebAPI.Sevices
             }
             Message newMessage = new(id, message, sender, receiver);
             mList.Add(newMessage);
-            var user = users.Find(x => x.Id == SelfID);
+            var user = _contextUser.Find(x => x.Id == SelfID);
             var contact = user.Contacts.Find(x => x.Id == contactID);
             contact.Last = message;
             contact.lastdate = newMessage.Created;

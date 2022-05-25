@@ -51,6 +51,7 @@ function Register() {
           handleSuccess();
         }
       } catch (err) {
+
         console.log(err);
         if (err.message === "Request failed with status code 409")
           setErrorMessage("Username is taken!");
