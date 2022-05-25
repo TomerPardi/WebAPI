@@ -27,7 +27,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+![Screenshot 2022-05-24 at 15-55-01 Whatsapp Web Clone](https://user-images.githubusercontent.com/72495653/170186548-6ec1c18c-2215-45d8-a8e8-1fd32fa137d4.png)
+
 
 - This is the second part out of four in the project for _Advanced Programming 2_ course at Bar Ilan University.
 - In this part we created a web server using asp.net, which implemets the API provided.We migrated and adjusted the first part of the project (https://github.com/TomerPardi/Whatsapp-Web-Clone) to work with the server using API calls. In its current state the app supports only text communication.
