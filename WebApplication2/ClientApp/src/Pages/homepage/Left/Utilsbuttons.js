@@ -58,10 +58,23 @@ const Utilsbuttons = (props) => {
         }
       }
       handleClose();
-    } catch (err) {
-      alert("Some error occured");
+    }
+    catch (err) {
+      await err;
+      let status = err.response.status;
+      if (status === 409) {
+        alert("Error:Cannot add yourself or The user in alredy in your contacts list!");
+        return;
+      }
+      // 2) the contact that client wish to add is not exist in the system
+      // server returns 404
+      if (status === 404) {
+        alert("User doesn't exist, or the server address is incorrect.");
+        return;
+      }
+      //alert("Some error occured");
+      console.log(status);
       handleClose();
-      console.log(err);
       return;
     }
 
