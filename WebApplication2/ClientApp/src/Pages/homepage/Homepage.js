@@ -16,11 +16,11 @@ export default function Homepage(props) {
   const [contacts, setContacts] = useState([]);
   const [active, setActive] = useState("none");
   const [activeInfo, setActiveInfo] = useState("none");
-
+  
   useEffect(() => {
     const getContacts = async () => {
-      // we receive json from server via api`
-      const result = await axios.get(`https://${sharedContext.hostname}:7066/api/contacts`, {
+      // we receive json from server via api
+      const result = await axios.get("https://localhost:7066/api/contacts", {
         withCredentials: true,
       });
       setContacts(result.data);
@@ -31,10 +31,10 @@ export default function Homepage(props) {
 
 
   useEffect(() => {
-
+    
     const getMessages = async () => {
       const result = await axios.get(
-        `https://${sharedContext.hostname}:7066/api/contacts/${active}/messages`,
+        `https://localhost:7066/api/contacts/${active}/messages`,
         {
           withCredentials: true,
         }
@@ -42,14 +42,14 @@ export default function Homepage(props) {
       setMessages(result.data);
 
       const result2 = await axios.get(
-        `https://${sharedContext.hostname}:7066/api/contacts/${active}`,
+        `https://localhost:7066/api/contacts/${active}`,
         {
           withCredentials: true,
         }
       );
       setActiveInfo(result2.data);
     };
-
+    
     if (active !== "none") getMessages();
     props.setChanged(false);
   }, [props.changed, active]);

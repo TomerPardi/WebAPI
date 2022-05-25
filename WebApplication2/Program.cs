@@ -85,11 +85,11 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers().RequireCors("Allow All");
+app.MapControllers();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHub<MessagesHub>("/messagesHub").RequireCors("Allow All");
+    endpoints.MapHub<MessagesHub>("/messagesHub");
 });
 
 

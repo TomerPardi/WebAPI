@@ -30,7 +30,7 @@ export default function MessageInput(props) {
     // the server insert the message to the messages list with active contact
     try {
       await axios.post(
-        `https://${sharedContext.hostname}:7066/api/contacts/${sharedContext.activeContact}/messages`,
+        `https://localhost:7066/api/contacts/${sharedContext.activeContact}/messages`,
         {
           content: messageIn.value,
         },
@@ -57,7 +57,7 @@ export default function MessageInput(props) {
     props.setter(true);
     messageIn.value = "";
   }
-
+  
   return (
     <div className='wrap-message'>
       <InputGroup
@@ -65,7 +65,7 @@ export default function MessageInput(props) {
         style={{ flexWrap: "nowrap" }}
         onKeyPress={handleKeyPress}
       >
-
+        
 
         {(
           <div className='messageForm'>
@@ -79,7 +79,7 @@ export default function MessageInput(props) {
             />
           </div>
         )}
-        {(
+        { (
           <Button
             variant='light'
             type='submit'

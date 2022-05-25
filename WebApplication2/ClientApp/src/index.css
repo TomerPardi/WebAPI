@@ -1,3 +1,10 @@
+/* html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: linear-gradient(110deg, #147531 60%, #168d4c 60%);
+} */
 
 body {
   background: linear-gradient(-45deg, #f7f7f7, #9cca9c, #23d57c, #0f8b4d);

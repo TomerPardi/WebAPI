@@ -30,7 +30,7 @@ const Utilsbuttons = (props) => {
 
     try {
       const res = await axios.post(
-        `https://${sharedContext.hostname}:7066/api/contacts`,
+        "https://localhost:7066/api/contacts",
         {
           id: contactName,
           name: contactNick,
@@ -71,7 +71,7 @@ const Utilsbuttons = (props) => {
         {
           from: sharedContext.currentUser,
           to: contactName,
-          server: `${sharedContext.hostname}:7066`,
+          server: "localhost:7066",
         },
         { withCredentials: true }
       );
@@ -112,7 +112,7 @@ const Utilsbuttons = (props) => {
         className='utilsBtn'
         variant='light'
         onClick={() => {
-          fetch(`http://${sharedContext.hostname}:7066/Logout`);
+          fetch(`http://localhost:7066/Logout`);
           sharedContext.connection.invoke("Unjoin", sharedContext.currentUser);
           navigate("/", { replace: true });
           sharedContext.activeContact = "none";

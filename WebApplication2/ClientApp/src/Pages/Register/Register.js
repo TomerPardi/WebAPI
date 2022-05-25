@@ -10,7 +10,7 @@ function Register() {
   let navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [errorMessage, setErrorMessage] = useState("Default Error!");
-  const sharedContext = useContext(AppContext);
+
   const handleClose = () => setShow(false);
 
   // ********************************************************
@@ -41,7 +41,7 @@ function Register() {
       }
       try {
         const result = await axios.post(
-          `https://${sharedContext.hostname}:7066/api/Register`,
+          "https://localhost:7066/api/Register",
           { username: username.value, password: password.value }
           // { withCredentials: true }
         );
@@ -95,7 +95,7 @@ function Register() {
                     className='needs-validation'
                     noValidate
                     autoComplete='off'
-                  // onSubmit={handleSubmit}
+                    // onSubmit={handleSubmit}
                   >
                     <div className='mb-3'>
                       <label className='mb-2 text-muted' htmlFor='uname'>
@@ -111,7 +111,7 @@ function Register() {
                         pattern='^[a-zA-Z0-9]+$'
                         required
                         autoFocus
-                      // onChange={(e) => setUsername(e.target.value)}
+                        // onChange={(e) => setUsername(e.target.value)}
                       ></Form.Control>
                       <Form.Control.Feedback type='invalid'>
                         Username is required and should contain alphanumeric
@@ -134,7 +134,7 @@ function Register() {
                         name='password'
                         pattern='^[a-zA-Z0-9]+$'
                         required
-                      // onChange={(e) => setPassword(e.target.value)}
+                        // onChange={(e) => setPassword(e.target.value)}
                       ></Form.Control>
                       <Form.Control.Feedback type='invalid'>
                         Password is required and should contain alphanumeric
@@ -155,7 +155,7 @@ function Register() {
                         placeholder='Confirm password'
                         name='password'
                         required
-                      // onChange={(e) => setPassword2(e.target.value)}
+                        // onChange={(e) => setPassword2(e.target.value)}
                       ></Form.Control>
                       <Form.Control.Feedback type='invalid'>
                         Password confirmation is required!
