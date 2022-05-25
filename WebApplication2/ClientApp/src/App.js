@@ -16,14 +16,15 @@ export const App = () => {
   const sharedContext = require("./sharedContext.json");
 
   useEffect(() => {
+    sharedContext.hostname = window.location.hostname;
     const authenticate = async () => {
       const res = await axios
-        .get(`https://localhost:7066/Self`, {
+        .get(`https://${sharedContext.hostname}:7066/Self`, {
           withCredentials: true,
         })
         .catch((e) => console.error(e));
       const serverRes = await axios
-        .get(`https://localhost:7066/Server`, {
+        .get(`https://${sharedContext.hostname}:7066/Server`, {
         })
         .catch((e) => console.error(e));
       setLoading(false);
@@ -38,7 +39,7 @@ export const App = () => {
   const connectionFunc = async (username) => {
     try {
       const connection = new HubConnectionBuilder()
-        .withUrl("https://localhost:7066/messagesHub")
+        .withUrl(`https://${sharedContext.hostname}:7066/messagesHub`)
         .build();
 
       sharedContext.connection = connection;
