@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
 using WebAPI.Sevices;
@@ -61,31 +58,6 @@ namespace WebAPI.Controllers
             return HttpContext.Request.Host.ToString();
         }
 
-  
-
-        /*private async 
-
-        Task Signin(User user)
-        {
-            Console.WriteLine(user.Id+" "+user.Password);
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name,user.Id),
-            };
-
-            var claimsIdentity = new ClaimsIdentity(
-                claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            var authProperties = new AuthenticationProperties
-            {
-                IsPersistent = true,
-                AllowRefresh = true,
-                ExpiresUtc = DateTimeOffset.Now.AddDays(1),
-            };
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-           
-        }*/
 
 
         // POST api/<LoginController>
@@ -102,7 +74,6 @@ namespace WebAPI.Controllers
                 else
                 {
 
-                    // TODO: create session for logged in user!
                     var token = CreateToken(data.username);
                     Response.Cookies.Append("token", token, new CookieOptions
                     {
@@ -133,7 +104,6 @@ namespace WebAPI.Controllers
                 _configuration["JwtParams:Audience"],
                 claims,
                 expires: DateTime.Now.AddMinutes(60),
-                //expires: DateTime.UtcNow.AddSeconds(15),
                 signingCredentials: mac
                 );
             return new JwtSecurityTokenHandler().WriteToken(token);

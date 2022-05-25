@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.SignalR;
 using WebAPI.Hubs;
 using WebAPI.Sevices;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace WebAPI.Controllers
 {
     public class TransferPayload
@@ -14,7 +12,7 @@ namespace WebAPI.Controllers
         public string content { get; set; }
     }
 
-    
+
 
     [Route("api/transfer")]
     [ApiController]
@@ -22,7 +20,7 @@ namespace WebAPI.Controllers
     {
         private readonly IUserService service;
         private readonly IHubContext<MessagesHub> _hubContext;
-        
+
 
         public TransferController(IUserService s, IHubContext<MessagesHub> hubContext)
         {
@@ -33,14 +31,13 @@ namespace WebAPI.Controllers
         // POST api/<TransferController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] TransferPayload data)
-        //public IActionResult Post(string from, string to, string content)
         {
             service.AddMessage(data.to, data.from, data.content, false);
             try
             {
-               await _hubContext.Clients.Group(data.to).SendAsync("Changed");
+                await _hubContext.Clients.Group(data.to).SendAsync("Changed");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.Write(ex);
             }

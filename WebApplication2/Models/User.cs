@@ -18,9 +18,5 @@ namespace WebApplication2.Models
         public string Password { get; set; }
         public List<Contact> Contacts { get; set; }
 
-
-        // propety of image?
-
-        // where to place messages?
     }
 }

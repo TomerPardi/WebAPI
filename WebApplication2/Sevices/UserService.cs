@@ -32,22 +32,22 @@ namespace WebAPI.Sevices
         {
             //find self in user list
             var user = users.Find(x => x.Id == Self);
-            
+
             var contact = user.Contacts.Find(x => x.Id == UserId);
             contact.Name = Name;
             contact.Server = Server;
 
         }
 
-        public void UpdateContact(Contact contact,string Name,string Server)
+        public void UpdateContact(Contact contact, string Name, string Server)
         {
-  
+
             contact.Name = Name;
             contact.Server = Server;
 
         }
 
-        public bool DeleteContact(string self,string toRemove)
+        public bool DeleteContact(string self, string toRemove)
         {
             var user = users.Find(x => x.Id == self);
             return user.Contacts.RemoveAll(x => x.Id == toRemove) > 0;
@@ -123,30 +123,32 @@ namespace WebAPI.Sevices
         {
             var user = GetById(selfID).Contacts.Find(x => x.Id == contactID);
             // if last message, update in contact's Last and LastDate
-            if (messageID == user.Messages.Count - 1 && messageID != 0) {
+            if (messageID == user.Messages.Count - 1 && messageID != 0)
+            {
                 Message m = GetMessageById(selfID, contactID, messageID - 1);
                 user.Last = m.Content;
                 user.lastdate = m.Created;
             }
 
-            GetAllMessages(selfID,contactID).RemoveAll(x => x.Id == messageID);
-            
+            GetAllMessages(selfID, contactID).RemoveAll(x => x.Id == messageID);
+
         }
 
         public void AddMessage(string SelfID, string contactID, string message, bool isSelf)
         {
-            // TODO: update lastMessage's content and date.
             List<Message> mList = GetAllMessages(SelfID, contactID);
             int id;
             if (mList.Count == 0) id = 0;
             else id = mList.Max(x => x.Id) + 1;
 
-            string sender,receiver;
-            if (isSelf) {
+            string sender, receiver;
+            if (isSelf)
+            {
                 sender = SelfID;
                 receiver = contactID;
             }
-            else {
+            else
+            {
                 sender = contactID;
                 receiver = SelfID;
             }
@@ -156,17 +158,6 @@ namespace WebAPI.Sevices
             var contact = user.Contacts.Find(x => x.Id == contactID);
             contact.Last = message;
             contact.lastdate = newMessage.Created;
-
-
-            // not sure if we need that, because we call "transfer" from client
-            /*if (isSelf)
-            {
-                
-                HttpClient httpClient = new HttpClient();
-                string server = GetAllContacts(SelfID).Find(x => x.Id == contactID).Server;
-                var toSend = new { from = sender, to = receiver, content = message };
-                httpClient.PostAsJsonAsync(server + "/api/transfer/", toSend);
-            }*/
         }
 
         public void ChangeMessage(string selfID, string message, string contactID, int messageID)
