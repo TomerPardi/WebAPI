@@ -17,9 +17,13 @@ function Login(props) {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
+    (function () {
+      var link = `http://${sharedContext.hostname}:5081`;
+      document.getElementById("rankLink").setAttribute("href", link);
+    })();
     const getServer = async () => {
       const serverRes = await axios
-        .get(`https://localhost:7066/Server`, {
+        .get(`https://${sharedContext.hostname}:7066/Server`, {
         })
         .catch((e) => console.error(e));
       if (serverRes !== undefined) {
@@ -40,7 +44,7 @@ function Login(props) {
     try {
       axios
         .post(
-          `https://localhost:7066/api/Login`,
+          `https://${sharedContext.hostname}:7066/api/Login`,
           { username: username, password: password },
           {
             withCredentials: true,
@@ -162,9 +166,13 @@ function Login(props) {
                     Don't have an account?{" "}
                     <Link to='/register'>Register now!</Link>
                     <br></br><br></br>
+                    <script language="javascript" type="text/javascript">
+                      var scrt_var = 10;
+                    </script>
                     <a
                       type='button'
-                      href='http://localhost:5081'
+                      id="rankLink"
+                      //href=`http://${sharedContext.hostname}:5081`
                       className='btn btn-outline-primary'
                     >
                       <i class='bi bi-star'></i>
@@ -178,7 +186,7 @@ function Login(props) {
         </div>
       </section>
       {/* <div className='d-flex align-items-center flex-column'>
-        <a href='http://localhost:5081'>Rate us!</a>
+        <a href=`http://${sharedContext.hostname}:5081`>Rate us!</a>
       </div> */}
     </>
   );

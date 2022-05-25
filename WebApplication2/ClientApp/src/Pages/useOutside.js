@@ -6,7 +6,7 @@ function useAlerter(ref, props) {
     function handleBgClick(event) {
       let modal = document.getElementsByClassName("modal-dialog");
       // ugly patch to check if there is a modal in the foregfround
-      if (modal.length > 0 && modal[0].hidden == false) return;
+      if (modal.length > 0 && modal[0].hidden === false) return;
       if (ref.current && !ref.current.contains(event.target)) {
         props.setter("none");
       }

@@ -11,8 +11,13 @@
 <body>
     
     <div class="wrap d-flex justify-content-center overflow-hidden">
+
         <div class=" ms-1 ">
-            <a href="http://localhost:3000" class="btn btn-outline-light text-black border-dark" text="dark" >Back to chat</a>
+            @{
+                var test = (Context.Request.Host.Host);
+                test = "http://" + test + ":3000";
+            }
+            <a href="@test" class="btn btn-outline-light text-black border-dark" text="dark" >Back to chat</a>
         </div>
         
         <div role="main" class="mx-auto">

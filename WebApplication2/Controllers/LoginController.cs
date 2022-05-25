@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -22,6 +23,7 @@ namespace WebAPI.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("Allow All")]
     public class LoginController : ControllerBase
     {
         public IConfiguration _configuration;
