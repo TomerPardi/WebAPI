@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Sevices;
 using WebApplication2.Models;
@@ -44,10 +45,27 @@ namespace WebAPI.Controllers
 
         // GET: api/<ContactsController>
         [HttpGet]
-        public IEnumerable<Contact> Get()
+        public async Task<IEnumerable<Contact>> GetAsync()
         {
             // who made the get request
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
+/*            var message = new FirebaseAdmin.Messaging.Message()
+            {
+                Notification = new Notification()
+                    {
+                       Body = "Body",
+                       Title = "title"
+                    },
+                Data = new Dictionary<string, string>()
+                    {
+                        { "score", "850" },
+                        { "time", "2:45" },
+                    },
+
+                Token = "fTosplPkSFiFOX7lmRvXzz:APA91bFCniPvgGr1Gk9Gstdzf3m1PjgjQJP1z9SBYZfc-ltKCEgZ0u6KLrzvKFHkGU0-50acPo1A_6vHcEw-2IuNxaSw9_6rZlhlQ9hsGbA_g78U5lfdUhUGrlckSzrASpvt7qKg_sr3",
+
+            };
+            string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);*/
             return service.GetAllContacts(selfID);
         }
 
@@ -59,6 +77,7 @@ namespace WebAPI.Controllers
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
             var contact = service.GetAllContacts(selfID).Find(i => i.Id == user);
             if (contact == null) return NotFound();
+
             return Ok(contact);
         }
 
@@ -66,6 +85,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] ContactPayload data)
         {
+            Console.WriteLine("Contacts post");
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
             var user = service.GetById(selfID);
             var contact = user.Contacts.FindAll(x => x.Id == data.id);
@@ -77,7 +97,9 @@ namespace WebAPI.Controllers
             var sourceServer = HttpContext.Request.Host.ToString();
             service.CreateContact(selfID, data.id, data.name, data.server);
             // create a contact at the other side
+            Console.Write("Created contact " + data.id + " @ " + selfID + " ");
             return StatusCode(StatusCodes.Status201Created);
+            
         }
 
         // PUT api/<ContactsController>/5
@@ -144,7 +166,6 @@ namespace WebAPI.Controllers
         public IActionResult PostMessage([FromBody] MessagePayload data, string contactID)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
-
             service.AddMessage(selfID, contactID, data.content, true);
             return StatusCode(StatusCodes.Status201Created);
         }
@@ -157,5 +178,7 @@ namespace WebAPI.Controllers
 
             service.ChangeMessage(selfID, data.content, contactID, int.Parse(messageID));
         }
+
+
     }
 }

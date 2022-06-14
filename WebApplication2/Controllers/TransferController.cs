@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using WebAPI.Hubs;
 using WebAPI.Sevices;
@@ -33,8 +34,32 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Post([FromBody] TransferPayload data)
         {
             service.AddMessage(data.to, data.from, data.content, false);
+            String fromToken = service.getTokenByUser(data.to);
             try
             {
+                try
+                {
+                    var message = new Message()
+                    {
+                        Notification = new Notification()
+                        {
+                            Body = "from " + data.from+":"+data.content,
+                            Title = "New Message",
+                        },
+                        Data = new Dictionary<string, string>()
+                    {
+                        { "sentFrom", data.from },
+                        { "content", data.content },
+                        
+                    },
+                        Token = fromToken,
+                    };
+                    string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+                }
+                catch (Exception ex)
+                {
+                    Console.Write(ex);
+                }
                 await _hubContext.Clients.Group(data.to).SendAsync("Changed");
             }
             catch (Exception ex)

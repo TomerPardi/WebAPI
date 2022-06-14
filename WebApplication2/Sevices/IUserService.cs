@@ -6,7 +6,6 @@ namespace WebAPI.Sevices
     {
         public void CreateUser(string Id, string Password);
 
-
         public User GetById(string Id);
         public void UpdateUser(User User);
         public List<Contact> GetAllContacts(string Id);
@@ -19,5 +18,11 @@ namespace WebAPI.Sevices
         public void DeleteMessageById(string selfID, string contactID, int messageID);
         public void AddMessage(string SelfID, string contactID, string message, bool isSelf);
         public void ChangeMessage(string selfID, string message, string contactID, int messageID);
+
+        public void insetTokenPair(String user, String token);
+
+        public string getTokenByUser(String user);
+
+        public void removeUser(String user);
     }
 }

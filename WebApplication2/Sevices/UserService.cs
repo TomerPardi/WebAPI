@@ -5,6 +5,22 @@ namespace WebAPI.Sevices
     public class UserService : IUserService
     {
         public List<User> users = new();
+        public Dictionary<String, String> userWithToken = new();
+
+        public void insetTokenPair(String user,String token)
+        {
+            userWithToken[user] = token;
+        }
+
+        public string getTokenByUser(String user)
+        {
+            return userWithToken[user];
+        }
+
+        public void removeUser(String user)
+        {
+            userWithToken.Remove(user);
+        }
 
         public UserService()
         {
@@ -136,7 +152,7 @@ namespace WebAPI.Sevices
 
         public void AddMessage(string SelfID, string contactID, string message, bool isSelf)
         {
-            List<Message> mList = GetAllMessages(SelfID, contactID);
+            List<Message> mList= GetAllMessages(SelfID, contactID);
             int id;
             if (mList.Count == 0) id = 0;
             else id = mList.Max(x => x.Id) + 1;

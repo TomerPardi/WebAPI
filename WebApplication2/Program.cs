@@ -3,8 +3,18 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPI.Hubs;
 using WebAPI.Sevices;
+using FirebaseAdmin;
+using FirebaseAdmin.Messaging;
+using Google.Apis.Auth.OAuth2;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var defaultApp = FirebaseApp.Create(new AppOptions(){ 
+    Credential = GoogleCredential.FromFile(
+    Path.Combine(
+        AppDomain.CurrentDomain.BaseDirectory, "androidwhatsapp-afa72-firebase-adminsdk-ldyqv-1d65efed13.json"))
+});
+
 
 // Add services to the container.
 builder.Services.AddCors(options =>
@@ -74,11 +84,12 @@ app.UseAuthorization();
 
 app.MapControllers().RequireCors("Allow All");
 
+app.UseHttpLogging();
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapHub<MessagesHub>("/messagesHub").RequireCors("Allow All");
 });
-
 
 
 app.Run();

@@ -40,6 +40,7 @@ namespace WebAPI.Controllers
             }
 
             service.CreateContact(data.to, data.from, data.from, data.server);
+            Console.Write("Invited contact "+data.to+" @ "+data.from+" ");
             return StatusCode(StatusCodes.Status201Created);
         }
 

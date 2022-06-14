@@ -18,6 +18,11 @@ namespace WebAPI.Controllers
         public string password { get; set; }
     }
 
+    public class TokenPayload
+    {
+        public string content { get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("Allow All")]
@@ -37,7 +42,9 @@ namespace WebAPI.Controllers
         [Authorize]
         public void Logout()
         {
-            HttpContext.SignOutAsync().Wait();
+            var selfID = HttpContext.User.FindFirst("UserId")?.Value;
+            service.removeUser(selfID);
+            //HttpContext.SignOutAsync().Wait();
         }
 
         [Authorize]
@@ -66,6 +73,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CredentialsPayload data)
         {
+            Console.WriteLine(data.ToString);
             // {"username":"alice", "password":"123"}
             //validation logic
             User user = service.GetById(data.username);
@@ -87,6 +95,17 @@ namespace WebAPI.Controllers
                 }
             }
         }
+
+        [HttpPost("token")]
+        public async Task<IActionResult> TokenFromAndroid([FromBody] TokenPayload data)
+        {
+            var selfID = HttpContext.User.FindFirst("UserId")?.Value;
+
+            service.insetTokenPair(selfID, data.content);
+            return Ok();
+
+        }
+
 
         private string CreateToken(string username)
         {

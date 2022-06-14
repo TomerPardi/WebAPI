@@ -1,3 +1,4 @@
+using FirebaseAdmin.Messaging;
 using RatingApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,3 +28,5 @@ app.MapControllerRoute(
     pattern: "{controller=Users}/{action=Index}/{id?}");
 
 app.Run();
+
+
