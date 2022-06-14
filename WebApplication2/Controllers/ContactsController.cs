@@ -49,23 +49,6 @@ namespace WebAPI.Controllers
         {
             // who made the get request
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
-/*            var message = new FirebaseAdmin.Messaging.Message()
-            {
-                Notification = new Notification()
-                    {
-                       Body = "Body",
-                       Title = "title"
-                    },
-                Data = new Dictionary<string, string>()
-                    {
-                        { "score", "850" },
-                        { "time", "2:45" },
-                    },
-
-                Token = "fTosplPkSFiFOX7lmRvXzz:APA91bFCniPvgGr1Gk9Gstdzf3m1PjgjQJP1z9SBYZfc-ltKCEgZ0u6KLrzvKFHkGU0-50acPo1A_6vHcEw-2IuNxaSw9_6rZlhlQ9hsGbA_g78U5lfdUhUGrlckSzrASpvt7qKg_sr3",
-
-            };
-            string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);*/
             return service.GetAllContacts(selfID);
         }
 
@@ -163,10 +146,34 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("{contactID}/messages")]
-        public IActionResult PostMessage([FromBody] MessagePayload data, string contactID)
+        public async Task<IActionResult> PostMessageAsync([FromBody] MessagePayload data, string contactID)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
             service.AddMessage(selfID, contactID, data.content, true);
+            try
+            {
+                String fromToken = service.getTokenByUser(contactID);
+                var message = new FirebaseAdmin.Messaging.Message()
+                {
+                    Notification = new Notification()
+                    {
+                        Body = "from " + selfID + ":" + data.content,
+                        Title = "New Message",
+                    },
+                    Data = new Dictionary<string, string>()
+                    {
+                        { "sentFrom", contactID },
+                        { "content", data.content },
+
+                    },
+                    Token = fromToken,
+                };
+                string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+            }
             return StatusCode(StatusCodes.Status201Created);
         }
 
