@@ -150,7 +150,7 @@ namespace WebAPI.Controllers
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
             service.AddMessage(selfID, contactID, data.content, true);
-            try
+          /*  try
             {
                 String fromToken = service.getTokenByUser(contactID);
                 var message = new FirebaseAdmin.Messaging.Message()
@@ -173,7 +173,7 @@ namespace WebAPI.Controllers
             catch (Exception ex)
             {
                 Console.Write(ex);
-            }
+            }*/
             return StatusCode(StatusCodes.Status201Created);
         }
 

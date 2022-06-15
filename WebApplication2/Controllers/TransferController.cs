@@ -43,12 +43,12 @@ namespace WebAPI.Controllers
                     {
                         Notification = new Notification()
                         {
-                            Body = "from " + data.from + ":" + data.content,
+                            Body = "from " + data.to + ":" + data.content,
                             Title = "New Message",
                         },
                         Data = new Dictionary<string, string>()
                     {
-                        { "sentFrom", data.from },
+                        { "sentFrom", data.to },
                         { "content", data.content },
 
                     },
