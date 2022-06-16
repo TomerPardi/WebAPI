@@ -21,5 +21,10 @@ namespace WebApplication2.Models
         [DataType(DataType.DateTime)]
         public string lastdate { get; set; }
         public List<Message> Messages { get; set; }
+
+        // fg's
+
+        public String UserId { get; set; }
+        public User User { get; set; }
     }
 }

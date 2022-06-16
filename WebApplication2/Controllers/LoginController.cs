@@ -76,7 +76,7 @@ namespace WebAPI.Controllers
             Console.WriteLine(data.ToString);
             // {"username":"alice", "password":"123"}
             //validation logic
-            User user = service.GetById(data.username);
+            User user = service.GetByIdAsync(data.username);
             if (user == null) return BadRequest();
             else
             {

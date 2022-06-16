@@ -5,10 +5,10 @@ namespace WebApplication2.Models
     public class User
     {
 
-        public User(string v, string pas)
+        public User(string Id, string Password)
         {
-            Id = v;
-            Password = pas;
+            this.Id = Id;
+            this.Password = Password;
             Contacts = new();
         }
 

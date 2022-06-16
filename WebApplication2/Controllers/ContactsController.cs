@@ -49,7 +49,7 @@ namespace WebAPI.Controllers
         {
             // who made the get request
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
-            return service.GetAllContacts(selfID);
+            return service.GetAllContactsAsync(selfID);
         }
 
         // GET api/<ContactsController>/{user}
@@ -58,7 +58,7 @@ namespace WebAPI.Controllers
         public IActionResult Get(string user)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
-            var contact = service.GetAllContacts(selfID).Find(i => i.Id == user);
+            var contact = service.GetAllContactsAsync(selfID).Find(i => i.Id == user);
             if (contact == null) return NotFound();
 
             return Ok(contact);
@@ -70,12 +70,12 @@ namespace WebAPI.Controllers
         {
             Console.WriteLine("Contacts post");
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
-            var user = service.GetById(selfID);
+            var user = service.GetByIdAsync(selfID);
             var contact = user.Contacts.FindAll(x => x.Id == data.id);
 
             if (selfID == data.id) return StatusCode(StatusCodes.Status409Conflict);
             if (contact.Count != 0) return StatusCode(StatusCodes.Status409Conflict);
-            if (service.GetById(data.id) == null) return NotFound();
+            if (service.GetByIdAsync(data.id) == null) return NotFound();
 
             var sourceServer = HttpContext.Request.Host.ToString();
             service.CreateContact(selfID, data.id, data.name, data.server);
@@ -91,7 +91,7 @@ namespace WebAPI.Controllers
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
-            var user = service.GetAllContacts(selfID).Find(x => x.Id == id);
+            var user = service.GetAllContactsAsync(selfID).Find(x => x.Id == id);
 
             if (user == null) return NotFound();
             service.UpdateContact(user, data.name, data.server);
@@ -105,7 +105,7 @@ namespace WebAPI.Controllers
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
-            bool b = service.DeleteContact(selfID, id);
+            bool b = service.DeleteContactAsync(selfID, id);
             if (!b) return NotFound();
             return StatusCode(StatusCodes.Status204NoContent);
         }
@@ -120,7 +120,7 @@ namespace WebAPI.Controllers
 
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
-            return Ok(service.GetAllMessages(selfID, id));
+            return Ok(service.GetAllMessagesAsync(selfID, id));
         }
 
         // GET api/<ContactsController>/{contactID}/messages/{messageID}
@@ -130,7 +130,7 @@ namespace WebAPI.Controllers
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
-            return Ok(service.GetMessageById(selfID, contactID, messageID));
+            return Ok(service.GetMessageByIdAsync(selfID, contactID, messageID));
         }
 
         // GET api/<ContactsController>/{contactID}/messages/{messageID}
@@ -140,7 +140,7 @@ namespace WebAPI.Controllers
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
-            service.DeleteMessageById(selfID, contactID, messageID);
+            service.DeleteMessageByIdAsync(selfID, contactID, messageID);
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
@@ -149,7 +149,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> PostMessageAsync([FromBody] MessagePayload data, string contactID)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
-            service.AddMessage(selfID, contactID, data.content, true);
+            service.AddMessageAsync(selfID, contactID, data.content, true);
           /*  try
             {
                 String fromToken = service.getTokenByUser(contactID);
@@ -183,7 +183,7 @@ namespace WebAPI.Controllers
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
-            service.ChangeMessage(selfID, data.content, contactID, int.Parse(messageID));
+            service.ChangeMessageAsync(selfID, data.content, contactID, int.Parse(messageID));
         }
 
 

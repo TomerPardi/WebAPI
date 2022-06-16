@@ -6,8 +6,13 @@ using WebAPI.Sevices;
 using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using WebAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<WebAPIContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("WebAPIContext") ?? throw new InvalidOperationException("Connection string 'WebAPIContext' not found.")));
 
 var defaultApp = FirebaseApp.Create(new AppOptions(){ 
     Credential = GoogleCredential.FromFile(

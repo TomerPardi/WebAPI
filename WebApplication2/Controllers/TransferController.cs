@@ -33,7 +33,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] TransferPayload data)
         {
-            service.AddMessage(data.to, data.from, data.content, false);
+            service.AddMessageAsync(data.to, data.from, data.content, false);
             String fromToken = service.getTokenByUser(data.to);
             try
             {

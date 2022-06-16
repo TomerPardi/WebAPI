@@ -1,9 +1,12 @@
-﻿using WebApplication2.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using WebAPI.Data;
+using WebApplication2.Models;
 
 namespace WebAPI.Sevices
 {
     public class UserService : IUserService
     {
+        private readonly WebAPIContext _context;
         public List<User> users = new();
         public Dictionary<String, String> userWithToken = new();
 
@@ -36,43 +39,47 @@ namespace WebAPI.Sevices
             users.Add(new User(Id, Password));
         }
 
-        public void CreateContact(string Self, string UserId, string Name, string Server)
+        public async void CreateContact(string Self, string UserId, string Name, string Server)
         {
-            //find self in user list
-            var user = users.Find(x => x.Id == Self);
+            User user = await _context.User.FirstOrDefaultAsync(m => m.Id == Self);
+            Contact contact = new Contact(UserId, Name, Server);
+            contact.User = user;
+            contact.UserId = Self;
             // create and add new contact to self Contacts list via passed params
-            user.Contacts.Add(new Contact(UserId, Name, Server));
+            user.Contacts.Add(contact);
+            _context.Add(contact);
+            await _context.SaveChangesAsync();
         }
 
-        public void UpdateContact(string Self, string UserId, string Name, string Server)
-        {
-            //find self in user list
-            var user = users.Find(x => x.Id == Self);
 
-            var contact = user.Contacts.Find(x => x.Id == UserId);
-            contact.Name = Name;
-            contact.Server = Server;
-
-        }
-
-        public void UpdateContact(Contact contact, string Name, string Server)
+        public async void UpdateContact(Contact contact, string Name, string Server)
         {
 
             contact.Name = Name;
             contact.Server = Server;
+            _context.Update(contact);
+            await _context.SaveChangesAsync();
 
         }
 
-        public bool DeleteContact(string self, string toRemove)
+        public async Task<bool> DeleteContactAsync(string self, string toRemove)
         {
-            var user = users.Find(x => x.Id == self);
-            return user.Contacts.RemoveAll(x => x.Id == toRemove) > 0;
+            var contact = await _context.Contact.FindAsync(toRemove);
+            if (contact != null)
+            {
+                _context.Contact.Remove(contact);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            
+            return false;
         }
 
 
-        public User GetById(string Id)
+        public async Task<User> GetByIdAsync(string Id)
         {
-            return (users.Find(x => x.Id == Id));
+            User user = await _context.User.FirstOrDefaultAsync(m => m.Id == Id);
+            return user;
         }
 
         public void UpdateUser(User User)
@@ -114,48 +121,55 @@ namespace WebAPI.Sevices
             }
         }
 
-        public List<Contact> GetAllContacts(string Id)
+        public async Task<List<Contact>> GetAllContactsAsync(string Id)
         {
-            User user = GetById(Id);
+            var contacts = await _context.Contact.Include(m => m.Messages).
+                Where(i => i.User.Id == Id).ToListAsync();
+            
             // sort contacts by the last message
-            if (user.Contacts.Count == 0) { return user.Contacts; }
-            user.Contacts.Sort(LastMessageComp);
-            return user.Contacts;
+            if (contacts.Count == 0) { return contacts; }
+            contacts.Sort(LastMessageComp);
+            return contacts;
         }
 
-        public List<Message> GetAllMessages(string self, string id)
-        {
-            var user = GetById(self).Contacts.Find(x => x.Id == id);
-            if (user != null) return GetById(self).Contacts.Find(x => x.Id == id).Messages;
-            else return null;
-        }
 
-        public Message GetMessageById(string selfID, string contactID, int messageID)
+        public List<Message> GetAllMessages(Contact contact)
         {
-            return GetAllMessages(selfID, contactID).FirstOrDefault(x => x.Id == messageID);
-        }
+            var messages = _context.Message.Where(i => i.Contact.Id == contact.Id).ToList();
+            return messages;
 
-        public void DeleteMessageById(string selfID, string contactID, int messageID)
+        }
+        public async Task<List<Message>> GetAllMessagesAsync(string self, string id)
         {
-            var user = GetById(selfID).Contacts.Find(x => x.Id == contactID);
-            // if last message, update in contact's Last and LastDate
-            if (messageID == user.Messages.Count - 1 && messageID != 0)
+            try
             {
-                Message m = GetMessageById(selfID, contactID, messageID - 1);
-                user.Last = m.Content;
-                user.lastdate = m.Created;
+                var messages = await _context.Message.Where(i => i.Contact.Id == id).ToListAsync();
+                return messages;
             }
+            catch (Exception)
+            {
+                return null;
+            }
+            
+        }
 
-            GetAllMessages(selfID, contactID).RemoveAll(x => x.Id == messageID);
+        public async Task<Message> GetMessageByIdAsync(string selfID, string contactID, int messageID)
+        {
+            var message = await _context.Message.FindAsync(messageID);
+            return message;
+        }
+
+        public async Task DeleteMessageByIdAsync(string selfID, string contactID, int messageID)
+        {
+            var message = await _context.Message.FindAsync(messageID);
 
         }
 
-        public void AddMessage(string SelfID, string contactID, string message, bool isSelf)
+        public async Task AddMessageAsync(string SelfID, string contactID, string message, bool isSelf)
         {
-            List<Message> mList= GetAllMessages(SelfID, contactID);
-            int id;
-            if (mList.Count == 0) id = 0;
-            else id = mList.Max(x => x.Id) + 1;
+
+            var contacts = await GetAllContactsAsync(SelfID);
+            var contact = contacts.Result.
 
             string sender, receiver;
             if (isSelf)
@@ -168,7 +182,10 @@ namespace WebAPI.Sevices
                 sender = contactID;
                 receiver = SelfID;
             }
-            Message newMessage = new(id, message, sender, receiver);
+            Message newMessage = new(message, sender, receiver);
+            newMessage.ContactId = contactID;
+            newMessage.UserId = SelfID;
+
             mList.Add(newMessage);
             var user = users.Find(x => x.Id == SelfID);
             var contact = user.Contacts.Find(x => x.Id == contactID);
@@ -176,19 +193,15 @@ namespace WebAPI.Sevices
             contact.lastdate = newMessage.Created;
         }
 
-        public void ChangeMessage(string selfID, string message, string contactID, int messageID)
+        public async Task ChangeMessageAsync(string selfID, string content, string contactID, int messageID)
         {
-            var m = GetMessageById(selfID, contactID, messageID);
-            if (m != null)
+            Message message = await _context.Message.FindAsync(messageID);
+            
+            if (message != null)
             {
-                m.Content = message;
-                var user = GetById(selfID).Contacts.Find(x => x.Id == contactID);
-                // if last message, update in contact's Last and LastDate
-                if (messageID == user.Messages.Count - 1 && messageID != 0)
-                {
-                    user.Last = message;
-                    user.lastdate = DateTime.Now.ToString("s");
-                }
+                message.Content = content;
+                _context.Message.Update(message);
+                await _context.SaveChangesAsync();
             }
         }
     }
