@@ -49,16 +49,18 @@ namespace WebAPI.Controllers
         {
             // who made the get request
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
-            return service.GetAllContactsAsync(selfID);
+            var contacts = await service.GetAllContactsAsync(selfID);
+            return contacts;
         }
 
         // GET api/<ContactsController>/{user}
         [HttpGet]
         [Route("{user}")]
-        public IActionResult Get(string user)
+        public async Task<IActionResult> GetAsync(string user)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
-            var contact = service.GetAllContactsAsync(selfID).Find(i => i.Id == user);
+            var contacts = await service.GetAllContactsAsync(selfID);
+            var contact = contacts.Find(i => i.Id == user);
             if (contact == null) return NotFound();
 
             return Ok(contact);
@@ -66,19 +68,20 @@ namespace WebAPI.Controllers
 
         // POST api/<ContactsController>
         [HttpPost]
-        public IActionResult Post([FromBody] ContactPayload data)
+        public async Task<IActionResult> PostAsync([FromBody] ContactPayload data)
         {
             Console.WriteLine("Contacts post");
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
-            var user = service.GetByIdAsync(selfID);
-            var contact = user.Contacts.FindAll(x => x.Id == data.id);
+            var contacts = await service.GetAllContactsAsync(selfID);
+
+            var contact = contacts.FindAll(x => x.Id == data.id);
 
             if (selfID == data.id) return StatusCode(StatusCodes.Status409Conflict);
             if (contact.Count != 0) return StatusCode(StatusCodes.Status409Conflict);
             if (service.GetByIdAsync(data.id) == null) return NotFound();
 
             var sourceServer = HttpContext.Request.Host.ToString();
-            service.CreateContact(selfID, data.id, data.name, data.server);
+            await service.CreateContact(selfID, data.id, data.name, data.server);
             // create a contact at the other side
             Console.Write("Created contact " + data.id + " @ " + selfID + " ");
             return StatusCode(StatusCodes.Status201Created);
@@ -87,25 +90,26 @@ namespace WebAPI.Controllers
 
         // PUT api/<ContactsController>/5
         [HttpPut("{id}")]
-        public IActionResult Put([FromBody] PutPayload data, string id)
+        public async Task<IActionResult> PutAsync([FromBody] PutPayload data, string id)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
+            var contacts = await service.GetAllContactsAsync(selfID);
 
-            var user = service.GetAllContactsAsync(selfID).Find(x => x.Id == id);
+            var user = contacts.Find(x => x.Id == id);
 
             if (user == null) return NotFound();
-            service.UpdateContact(user, data.name, data.server);
+            await service.UpdateContact(user, data.name, data.server);
             return StatusCode(StatusCodes.Status201Created);
 
         }
 
         // DELETE api/<ContactsController>/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public async Task<IActionResult> DeleteAsync(string id)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
-            bool b = service.DeleteContactAsync(selfID, id);
+            bool b = await service.DeleteContactAsync(selfID, id);
             if (!b) return NotFound();
             return StatusCode(StatusCodes.Status204NoContent);
         }
@@ -115,32 +119,34 @@ namespace WebAPI.Controllers
         // GET api/<ContactsController>/{user}/messages
         [HttpGet]
         [Route("{id}/messages")]
-        public IActionResult GetAllMessages(string id)
+        public async Task<IActionResult> GetAllMessagesAsync(string id)
         {
 
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
+            var messages = await service.GetAllMessagesAsync(selfID, id);
 
-            return Ok(service.GetAllMessagesAsync(selfID, id));
+            return Ok(messages);
         }
 
         // GET api/<ContactsController>/{contactID}/messages/{messageID}
         [HttpGet]
         [Route("{contactID}/messages/{messageID}")]
-        public IActionResult GetMessageById(string contactID, int messageID)
+        public async Task<IActionResult> GetMessageByIdAsync(string contactID, int messageID)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
+            var message = await service.GetMessageByIdAsync(selfID, contactID, messageID);
 
-            return Ok(service.GetMessageByIdAsync(selfID, contactID, messageID));
+            return Ok(message);
         }
 
         // GET api/<ContactsController>/{contactID}/messages/{messageID}
         [HttpDelete]
         [Route("{contactID}/messages/{messageID}")]
-        public IActionResult DeleteMessageById(string contactID, int messageID)
+        public async Task<IActionResult> DeleteMessageByIdAsync(string contactID, int messageID)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
-            service.DeleteMessageByIdAsync(selfID, contactID, messageID);
+            await service.DeleteMessageByIdAsync(selfID, contactID, messageID);
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
@@ -149,41 +155,18 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> PostMessageAsync([FromBody] MessagePayload data, string contactID)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
-            service.AddMessageAsync(selfID, contactID, data.content, true);
-          /*  try
-            {
-                String fromToken = service.getTokenByUser(contactID);
-                var message = new FirebaseAdmin.Messaging.Message()
-                {
-                    Notification = new Notification()
-                    {
-                        Body = "from " + selfID + ":" + data.content,
-                        Title = "New Message",
-                    },
-                    Data = new Dictionary<string, string>()
-                    {
-                        { "sentFrom", contactID },
-                        { "content", data.content },
-
-                    },
-                    Token = fromToken,
-                };
-                string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
-            }
-            catch (Exception ex)
-            {
-                Console.Write(ex);
-            }*/
+            await service.AddMessageAsync(selfID, contactID, data.content, true);
+          
             return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpPut]
         [Route("{contactID}/messages/{messageID}")]
-        public void PutMessage([FromBody] MessagePayload data, string contactID, string messageID)
+        public async Task PutMessageAsync([FromBody] MessagePayload data, string contactID, string messageID)
         {
             var selfID = HttpContext.User.FindFirst("UserId")?.Value;
 
-            service.ChangeMessageAsync(selfID, data.content, contactID, int.Parse(messageID));
+            await service.ChangeMessageAsync(selfID, data.content, contactID, int.Parse(messageID));
         }
 
 

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPI.Data;
 
@@ -10,9 +11,10 @@ using WebAPI.Data;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(WebAPIContext))]
-    partial class WebAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20220618175300_init3")]
+    partial class init3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,9 +28,6 @@ namespace WebAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Last")
                         .HasColumnType("nvarchar(max)");
 
@@ -38,10 +37,13 @@ namespace WebAPI.Migrations
                     b.Property<string>("Server")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("lastdate")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id", "UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
@@ -57,12 +59,6 @@ namespace WebAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ContactId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ContactUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
@@ -82,7 +78,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContactId1", "ContactUserId");
+                    b.HasIndex("ContactId");
 
                     b.ToTable("Message");
                 });
@@ -104,9 +100,7 @@ namespace WebAPI.Migrations
                 {
                     b.HasOne("WebApplication2.Models.User", "User")
                         .WithMany("Contacts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -115,7 +109,7 @@ namespace WebAPI.Migrations
                 {
                     b.HasOne("WebApplication2.Models.Contact", "Contact")
                         .WithMany("Messages")
-                        .HasForeignKey("ContactId1", "ContactUserId");
+                        .HasForeignKey("ContactId");
 
                     b.Navigation("Contact");
                 });

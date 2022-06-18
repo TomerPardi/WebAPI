@@ -17,13 +17,13 @@ namespace WebApplication2.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public string Server { get; set; }
+        
         public string Last { get; set; }
         [DataType(DataType.DateTime)]
         public string lastdate { get; set; }
         public List<Message> Messages { get; set; }
 
         // fg's
-
         public String UserId { get; set; }
         public User User { get; set; }
     }

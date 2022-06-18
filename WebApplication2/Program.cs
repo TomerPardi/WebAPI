@@ -35,7 +35,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IUserService, UserService>();
+
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddSignalR();
 
 

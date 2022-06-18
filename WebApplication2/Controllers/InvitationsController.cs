@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
                 Console.Write(ex);
             }
 
-            service.CreateContact(data.to, data.from, data.from, data.server);
+            await service.CreateContact(data.to, data.from, data.from, data.server);
             Console.Write("Invited contact "+data.to+" @ "+data.from+" ");
             return StatusCode(StatusCodes.Status201Created);
         }

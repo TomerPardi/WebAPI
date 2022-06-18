@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebAPI.Sevices;
-
+using WebApplication2.Models;
 
 namespace WebAPI.Controllers
 {
@@ -21,7 +21,8 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CredentialsPayload data)
         {
-            if (service.GetByIdAsync(data.username) != null) return BadRequest();
+            User user = await service.GetByIdAsync(data.username);
+            if (user != null) return BadRequest();
             service.CreateUser(data.username, data.password);
             return Ok();
         }

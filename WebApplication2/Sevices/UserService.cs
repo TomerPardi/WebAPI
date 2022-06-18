@@ -7,7 +7,9 @@ namespace WebAPI.Sevices
     public class UserService : IUserService
     {
         private readonly WebAPIContext _context;
-        public List<User> users = new();
+        //public List<User> users = new();
+
+        // FIREBASE +++++++++++++++++++++++++++++++++++++++++ FIREBASE
         public Dictionary<String, String> userWithToken = new();
 
         public void insetTokenPair(String user,String token)
@@ -25,34 +27,60 @@ namespace WebAPI.Sevices
             userWithToken.Remove(user);
         }
 
-        public UserService()
+        // FIREBASE +++++++++++++++++++++++++++++++++++++++++ FIREBASE
+
+
+        public UserService(WebAPIContext context)
         {
-            users.Add(new User("alice", "123"));
+            _context = context;
+            /*users.Add(new User("alice", "123"));
             users.Add(new User("bob", "456"));
             users.Add(new User("dan", "123"));
             users.Add(new User("tom", "123"));
-            users.Add(new User("peter", "123"));
+            users.Add(new User("peter", "123"));*/
         }
 
-        public void CreateUser(string Id, string Password)
+        // USER +++++++++++++++++++++++++++++++++++++++++ USER
+
+        public async Task CreateUser(string Id, string Password)
         {
-            users.Add(new User(Id, Password));
+            User user = new User(Id, Password);
+            await _context.AddAsync(user);
+            await _context.SaveChangesAsync();
+
         }
 
-        public async void CreateContact(string Self, string UserId, string Name, string Server)
+        public async Task<User> GetByIdAsync(string Id)
+        {
+            User user = await _context.User.FirstOrDefaultAsync(m => m.Id == Id);
+            return user;
+        }
+
+        public Task UpdateUser(User User)
+        {
+            throw new NotImplementedException();
+        }
+
+        // USER +++++++++++++++++++++++++++++++++++++++++ USER
+
+        // CONTACT +++++++++++++++++++++++++++++++++++++++++ CONTACT
+
+        public async Task CreateContact(string Self, string UserId, string Name, string Server)
         {
             User user = await _context.User.FirstOrDefaultAsync(m => m.Id == Self);
             Contact contact = new Contact(UserId, Name, Server);
             contact.User = user;
             contact.UserId = Self;
+            contact.Last = " ";
             // create and add new contact to self Contacts list via passed params
             user.Contacts.Add(contact);
-            _context.Add(contact);
+            //_context.Contact.Add(contact);
+            await _context.AddAsync(contact);
             await _context.SaveChangesAsync();
         }
 
 
-        public async void UpdateContact(Contact contact, string Name, string Server)
+        public async Task UpdateContact(Contact contact, string Name, string Server)
         {
 
             contact.Name = Name;
@@ -64,7 +92,8 @@ namespace WebAPI.Sevices
 
         public async Task<bool> DeleteContactAsync(string self, string toRemove)
         {
-            var contact = await _context.Contact.FindAsync(toRemove);
+            var contact = await _context.Contact.FirstOrDefaultAsync
+                (m => m.Id == toRemove && m.UserId == self);
             if (contact != null)
             {
                 _context.Contact.Remove(contact);
@@ -75,17 +104,26 @@ namespace WebAPI.Sevices
             return false;
         }
 
-
-        public async Task<User> GetByIdAsync(string Id)
+        public async Task<List<Contact>> GetAllContactsAsync(string Id)
         {
-            User user = await _context.User.FirstOrDefaultAsync(m => m.Id == Id);
-            return user;
+            var contacts = await _context.Contact.
+                Where(contact => contact.UserId == Id).ToListAsync();
+
+            // sort contacts by the last message
+            if (contacts.Count == 0) { return contacts; }
+            contacts.Sort(LastMessageComp);
+            return contacts;
         }
 
-        public void UpdateUser(User User)
+        public async Task<Contact> GetContact(string userId, string owner)
         {
-            throw new NotImplementedException();
+            var contact = await _context.Contact.FirstOrDefaultAsync(m => m.Id == userId && m.UserId == owner);
+            return contact;
         }
+
+        // CONTACT +++++++++++++++++++++++++++++++++++++++++ CONTACT
+
+        // MESSAGE +++++++++++++++++++++++++++++++++++++++++ MESSAGE
 
         private static int LastMessageComp(Contact x, Contact y)
         {
@@ -121,55 +159,48 @@ namespace WebAPI.Sevices
             }
         }
 
-        public async Task<List<Contact>> GetAllContactsAsync(string Id)
-        {
-            var contacts = await _context.Contact.Include(m => m.Messages).
-                Where(i => i.User.Id == Id).ToListAsync();
-            
-            // sort contacts by the last message
-            if (contacts.Count == 0) { return contacts; }
-            contacts.Sort(LastMessageComp);
-            return contacts;
-        }
 
 
-        public List<Message> GetAllMessages(Contact contact)
+        /*public List<Message> GetAllMessages(Contact contact)
         {
             var messages = _context.Message.Where(i => i.Contact.Id == contact.Id).ToList();
             return messages;
 
-        }
+        }*/
         public async Task<List<Message>> GetAllMessagesAsync(string self, string id)
         {
-            try
-            {
-                var messages = await _context.Message.Where(i => i.Contact.Id == id).ToListAsync();
-                return messages;
-            }
-            catch (Exception)
+            
+            var messages = await _context.Message.Where(i => i.UserId == self && 
+            i.ContactId == id).ToListAsync();
+            return messages;
+            
+            /*catch (Exception)
             {
                 return null;
-            }
+            }*/
             
         }
 
         public async Task<Message> GetMessageByIdAsync(string selfID, string contactID, int messageID)
         {
-            var message = await _context.Message.FindAsync(messageID);
+            var message = await _context.Message.FirstOrDefaultAsync(m => m.Id == messageID);
             return message;
         }
 
         public async Task DeleteMessageByIdAsync(string selfID, string contactID, int messageID)
         {
             var message = await _context.Message.FindAsync(messageID);
+            if (message != null)
+            {
+                _context.Remove(message);
+            }
 
         }
 
         public async Task AddMessageAsync(string SelfID, string contactID, string message, bool isSelf)
         {
 
-            var contacts = await GetAllContactsAsync(SelfID);
-            var contact = contacts.Result.
+            var contact = await GetContact(contactID, SelfID);
 
             string sender, receiver;
             if (isSelf)
@@ -186,16 +217,18 @@ namespace WebAPI.Sevices
             newMessage.ContactId = contactID;
             newMessage.UserId = SelfID;
 
-            mList.Add(newMessage);
-            var user = users.Find(x => x.Id == SelfID);
-            var contact = user.Contacts.Find(x => x.Id == contactID);
-            contact.Last = message;
             contact.lastdate = newMessage.Created;
+            contact.Last = message;
+
+            await UpdateContact(contact, contact.Name, contact.Server);
+            await _context.AddAsync(newMessage
+                );
+            await _context.SaveChangesAsync();
         }
 
         public async Task ChangeMessageAsync(string selfID, string content, string contactID, int messageID)
         {
-            Message message = await _context.Message.FindAsync(messageID);
+            Message message = await GetMessageByIdAsync(selfID, contactID, messageID);
             
             if (message != null)
             {
@@ -204,5 +237,8 @@ namespace WebAPI.Sevices
                 await _context.SaveChangesAsync();
             }
         }
+
+        // MESSAGE +++++++++++++++++++++++++++++++++++++++++ MESSAGE
+
     }
 }
