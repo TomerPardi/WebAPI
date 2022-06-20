@@ -23,7 +23,7 @@ namespace WebAPI.Controllers
         {
             User user = await service.GetByIdAsync(data.username);
             if (user != null) return BadRequest();
-            service.CreateUser(data.username, data.password);
+            await service.CreateUser(data.username, data.password);
             return Ok();
         }
     }
