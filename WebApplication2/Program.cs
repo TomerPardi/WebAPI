@@ -12,7 +12,9 @@ using WebAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<WebAPIContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("WebAPIContext") ?? throw new InvalidOperationException("Connection string 'WebAPIContext' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("WebAPIContext") ?? throw new InvalidOperationException("Connection string 'WebAPIContext' not found.")),
+    ServiceLifetime.Transient);
+
 
 var defaultApp = FirebaseApp.Create(new AppOptions(){ 
     Credential = GoogleCredential.FromFile(

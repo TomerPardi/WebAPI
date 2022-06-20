@@ -10,7 +10,7 @@ namespace WebAPI.Sevices
         //public List<User> users = new();
 
         // FIREBASE +++++++++++++++++++++++++++++++++++++++++ FIREBASE
-        public Dictionary<String, String> userWithToken = new();
+        public static Dictionary<String, String> userWithToken = new();
 
         public void insetTokenPair(String user,String token)
         {
@@ -67,13 +67,15 @@ namespace WebAPI.Sevices
 
         public async Task CreateContact(string Self, string UserId, string Name, string Server)
         {
+            //Thread.Sleep(250);
             User user = await _context.User.FirstOrDefaultAsync(m => m.Id == Self);
+            //Thread.Sleep(250);
             Contact contact = new Contact(UserId, Name, Server);
             contact.User = user;
             contact.UserId = Self;
             contact.Last = " ";
             // create and add new contact to self Contacts list via passed params
-            user.Contacts.Add(contact);
+            //user.Contacts.Add(contact);
             //_context.Contact.Add(contact);
             await _context.AddAsync(contact);
             await _context.SaveChangesAsync();
@@ -106,6 +108,7 @@ namespace WebAPI.Sevices
 
         public async Task<List<Contact>> GetAllContactsAsync(string Id)
         {
+            //Thread.Sleep(250);
             var contacts = await _context.Contact.
                 Where(contact => contact.UserId == Id).ToListAsync();
 

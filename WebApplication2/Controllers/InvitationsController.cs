@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using WebAPI.Hubs;
 using WebAPI.Sevices;
@@ -30,6 +31,26 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] InvitePayload data)
         {
+
+            try
+            {
+                String fromToken = service.getTokenByUser(data.to);
+                var message = new Message()
+                {
+                    Notification = new Notification()
+                    {
+                        
+                        Title = "Invited",
+                    },
+                    Token = fromToken,
+                };
+                string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+            }
+
             try
             {
                 await _hubContext.Clients.Group(data.to).SendAsync("Changed");

@@ -78,7 +78,7 @@ namespace WebAPI.Controllers
 
             if (selfID == data.id) return StatusCode(StatusCodes.Status409Conflict);
             if (contact.Count != 0) return StatusCode(StatusCodes.Status409Conflict);
-            if (service.GetByIdAsync(data.id) == null) return NotFound();
+            if (await service.GetByIdAsync(data.id) == null) return NotFound();
 
             var sourceServer = HttpContext.Request.Host.ToString();
             await service.CreateContact(selfID, data.id, data.name, data.server);
