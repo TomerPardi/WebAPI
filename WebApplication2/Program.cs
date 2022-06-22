@@ -12,8 +12,8 @@ using WebAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<WebAPIContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("WebAPIContext") ?? throw new InvalidOperationException("Connection string 'WebAPIContext' not found.")),
-    ServiceLifetime.Transient);
+        options.UseMySql(connectionString:builder.Configuration.GetConnectionString("WebAPIContext"),ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("WebAPIContext"))));
+
 
 
 var defaultApp = FirebaseApp.Create(new AppOptions(){ 
