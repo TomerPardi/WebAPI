@@ -69,7 +69,7 @@ Make sure to get all the dependencies for the react webclient.
   npm install
   ```
 * Ports:
-Please make sure that the rating app server is listeting on port 5081, and that nodejs listens on port 3000.
+Please make sure that the rating app server is listening on port 5081, and that nodejs listens on port 3000.
 
 
 
